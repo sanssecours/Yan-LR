@@ -1,6 +1,7 @@
 grammar Test;
 
-ids : ID+;
-ID : [a-zA-Z]+;
+ids : id+;
+id : ID;
 
+ID : [a-zA-Z]+;
 WS : [ \t] -> skip;

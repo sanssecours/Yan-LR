@@ -10,10 +10,9 @@ int main() {
   ANTLRInputStream input(u8"hello world");
   TestLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
+  TestParser parser(&tokens);
 
-  tokens.fill();
-  for (auto token : tokens.getTokens()) {
-    std::cout << token->toString() << std::endl;
-  }
+  tree::ParseTree *tree = parser.ids();
+  std::cout << tree->toStringTree(&parser) << std::endl << std::endl;
   return 0;
 }
