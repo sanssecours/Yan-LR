@@ -11,6 +11,7 @@ link_directories ("${ANTLR4CPP_LIBS}")
 antlr4cpp_process_grammar (badger parser
                            ${CMAKE_CURRENT_SOURCE_DIR}/Grammar/Test.g4)
 include_directories (${antlr4cpp_include_dirs_parser})
+link_directories (${antlr4cpp_include_dirs_parser})
 
 add_executable (badger main.cpp ${antlr4cpp_src_files_parser})
 add_dependencies (badger antlr4cpp antlr4cpp_generation_parser)
