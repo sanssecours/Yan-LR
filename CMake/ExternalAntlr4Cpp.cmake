@@ -82,7 +82,7 @@ endif()
 #
 # !TODO! Ensure Antlr tool available - copy from internet
 #
-# # !TODO! this shold be calculated based on the tags
+# # !TODO! this should be calculated based on the tags
 # if (NOT ANTLR4CPP_JAR_NAME)
 #   # default location to find antlr Java binary
 #   set(ANTLR4CPP_JAR_NAME antlr4-4.5.4-SNAPSHOT.jar)
