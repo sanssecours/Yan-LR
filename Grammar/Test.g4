@@ -1,7 +1,13 @@
 grammar Test;
 
-ids : id+;
-id : ID;
+nodes : node+ ;
+node : s_indent[2] ID NL ;
 
-ID : [a-zA-Z]+;
-WS : [ \t] -> skip;
+s_indent[int n]
+locals [int indent = 0;]
+  : ( {$indent<$n}? SPACE {$indent++;} )*
+  ;
+
+ID : [a-zA-Z]+ ;
+SPACE : [ ] ;
+NL : '\n' ;
