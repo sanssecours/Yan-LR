@@ -6,16 +6,24 @@
 
 using namespace parser;
 using namespace antlr4;
+using namespace std;
 
 class IdListener : public parser::TestBaseListener {
 public:
-  void exitS_indent(TestParser::S_indentContext *context) {
-    std::cout << "Found “" << context->getText() << "”" << std::endl;
+  void exitLevel1(TestParser::Level1Context *context) {
+    cout << "Found 🙋🏼‍♀️ “" << context->ID()->getText() << "”"
+         << endl;
+  }
+
+  void exitLevel2(TestParser::Level2Context *context) {
+    cout << "Found 🧒🏾 “" << context->ID()->getText() << "”" << endl;
   }
 };
 
 int main() {
-  ANTLRInputStream input(u8"  hello\n  world\n");
+  const string text = u8"  child\n";
+  cout << "——————————" << endl << text << "——————————" << endl;
+  ANTLRInputStream input(text);
   TestLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
   TestParser parser(&tokens);
