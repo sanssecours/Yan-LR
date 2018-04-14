@@ -1,5 +1,11 @@
 grammar Test;
 
+@header
+{
+  #include <iostream>
+  using namespace std;
+}
+
 nodes : node+ EOF;
 node : (level1 | level2 | level3) NL ;
 level1 : ID;
