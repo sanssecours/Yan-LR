@@ -11,8 +11,7 @@ using namespace std;
 class IdListener : public parser::TestBaseListener {
 public:
   void exitLevel1(TestParser::Level1Context *context) {
-    cout << "Found 🙋🏼‍♀️ “" << context->ID()->getText() << "”"
-         << endl;
+    cout << "Found 👸🏿 “" << context->ID()->getText() << "”" << endl;
   }
 
   void exitLevel2(TestParser::Level2Context *context) {
