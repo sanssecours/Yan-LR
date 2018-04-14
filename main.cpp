@@ -18,6 +18,10 @@ public:
   void exitLevel2(TestParser::Level2Context *context) {
     cout << "Found 🧒🏾 “" << context->ID()->getText() << "”" << endl;
   }
+
+  void exitLevel3(TestParser::Level3Context *context) {
+    cout << "Found 👼🏻 “" << context->ID()->getText() << "”" << endl;
+  }
 };
 
 int main() {
