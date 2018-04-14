@@ -21,7 +21,7 @@ public:
 };
 
 int main() {
-  const string text = u8"  child\n";
+  const string text = u8"parent\n  child\n    grandchild\n";
   cout << "——————————" << endl << text << "——————————" << endl;
   ANTLRInputStream input(text);
   TestLexer lexer(&input);
