@@ -10,13 +10,18 @@ grammar Test;
 {
   int n = -1;
   antlr4::Token *last;
+
+  bool indent (int spaces) const
+  {
+    return last && last->getType() == SPACES && n == spaces;
+  }
 }
 
 nodes : node+ EOF;
 node : (level1 | level2 | level3) newline ;
 level1 : { (!last || last->getType() == SPACES) && n <= 0 }? ID ;
-level2 : { last && last->getType() == SPACES && n == 2 }? ID ;
-level3 : { last && last->getType() == SPACES && n == 4 }? ID ;
+level2 : { indent(2) }? ID ;
+level3 : { indent(4) }? ID ;
 
 newline : '\n' SPACES?
         {
