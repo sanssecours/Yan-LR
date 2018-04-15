@@ -6,17 +6,26 @@ grammar Test;
   using namespace std;
 }
 
+@parser::members
+{
+  int n = -1;
+  antlr4::Token *last;
+}
+
 nodes : node+ EOF;
-node : (level1 | level2 | level3) NL ;
-level1 : ID;
-level2 :
-  { _input->LA(1) == SPACES && _input->LT(1)->getText().length() == 2 }?
-  SPACES ID
-  ;
-level3 :
-  { _input->LA(1) == SPACES && _input->LT(1)->getText().length() == 4 }?
-  SPACES ID;
+node : (level1 | level2 | level3) newline ;
+level1 : { (!last || last->getType() == SPACES) && n <= 0 }? ID ;
+level2 : { last && last->getType() == SPACES && n == 2 }? ID ;
+level3 : { last && last->getType() == SPACES && n == 4 }? ID ;
+
+newline : '\n' SPACES?
+        {
+          if ($SPACES) {
+            n = $SPACES.text.length();
+            last = $SPACES;
+          }
+        }
+        ;
 
 ID : [a-zA-Z0-9]+ ;
 SPACES : [ ]+ ;
-NL : '\n' ;
