@@ -11,18 +11,6 @@ grammar Test;
   using namespace antlr4;
 }
 
-@lexer::members
-{
-  int lastTokenType = 0;
-  int n = 0;
-
-  void emit(std::unique_ptr<Token> token) override {
-    lastTokenType = token->getType();
-    n = token->getText().length();
-    Lexer::emit(move(token));
-  }
-}
-
 @parser::members
 {
 
@@ -33,8 +21,7 @@ grammar Test;
     if (next && next->getType() == SPACES) {
       cout << "Spaces: " << next->getText().length() << endl;
     }
-    return spaces==0 || (next &&
-                         next->getType() == SPACES &&
+    return spaces==0 || (next->getType() == SPACES &&
                          next->getText().length() == spaces);
   }
 }
