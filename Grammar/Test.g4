@@ -2,28 +2,27 @@ grammar Test;
 
 @header
 {
-  #include <iostream>
+#include <iostream>
 }
 
 @postinclude
 {
-  using namespace std;
-  using namespace antlr4;
+using namespace std;
+using namespace antlr4;
 }
 
 @parser::members
 {
-
-  bool indent(int spaces) {
-    Token *next = getCurrentToken();
-    cout << "indent(" << spaces << ")" << endl;
-    cout << "next: " << next->getText() << endl;
-    if (next && next->getType() == SPACES) {
-      cout << "Spaces: " << next->getText().length() << endl;
-    }
-    return spaces==0 || (next->getType() == SPACES &&
-                         next->getText().length() == spaces);
+bool indent(int spaces) {
+  Token *next = getCurrentToken();
+  cout << "indent(" << spaces << ")" << endl;
+  cout << "next: " << next->getText() << endl;
+  if (next && next->getType() == SPACES) {
+    cout << "Spaces: " << next->getText().length() << endl;
   }
+  return spaces==0 || (next->getType() == SPACES &&
+                       next->getText().length() == spaces);
+}
 }
 
 nodes : node+ EOF;
