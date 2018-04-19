@@ -14,12 +14,9 @@ using namespace antlr4;
 @parser::members
 {
 bool indent(int spaces) {
-  cout << string(spaces, '.') << "indent(" << spaces << ")" << endl;
+  cout << "indent(" << spaces << "): ";
   Token *next = getCurrentToken();
-  cout << "next: “" << next->getText() << "”" << endl;
-  if (next && next->getType() == SPACES) {
-    cout << "Spaces: " << next->getText().length() << endl;
-  }
+  cout << "“" << next->getText() << "”" << endl;
   return spaces==0 || (_input->LT(1)->getType() == SPACES &&
                        _input->LT(1)->getText().length() == spaces);
 }
