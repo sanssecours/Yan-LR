@@ -25,7 +25,7 @@ bool indent(int spaces) {
 nodes : node+ EOF;
 node : (level1[0] | level2[2] | level3[4]) NL ;
 level1 [int n] : { indent($n) }? ID ;
-level2 [int n]: { indent(2) }? SPACES ID ;
+level2 [int n] : { indent(2) }? SPACES ID ;
 level3 [int n] : { indent($n) }? SPACES ID ;
 
 NL : '\n' ;
