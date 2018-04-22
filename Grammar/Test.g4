@@ -15,8 +15,7 @@ using namespace antlr4;
 {
 bool indent(int spaces) {
   cout << "indent(" << spaces << "): ";
-  Token *next = getCurrentToken();
-  cout << "“" << next->getText() << "”" << endl;
+  cout << "“" << _input->LT(1)->getText() << "”" << endl;
   return spaces==0 || (_input->LT(1)->getType() == SPACES &&
                        _input->LT(1)->getText().length() == spaces);
 }
