@@ -1,8 +1,8 @@
 .PHONY: compile clean configure
 
 run: compile
-	@Build/badger
-	@echo ""
+	@Build/badger | sed -e 's/<1>/<NEWLINE>/' \
+	                    -e 's/<2>/<ID>/'
 
 clean:
 	rm -rf Build
