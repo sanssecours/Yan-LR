@@ -17,6 +17,12 @@ int main() {
   ANTLRInputStream input(text);
   TestLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
+
+  tokens.fill();
+  for (auto token : tokens.getTokens()) {
+    std::cout << token->toString() << std::endl;
+  }
+
   TestParser parser(&tokens);
   tree::ParseTreeWalker walker{};
   IdListener listener{};
