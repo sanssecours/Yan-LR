@@ -8,20 +8,7 @@ using namespace parser;
 using namespace antlr4;
 using namespace std;
 
-class IdListener : public parser::TestBaseListener {
-public:
-  void exitLevel1(TestParser::Level1Context *context) {
-    cout << "Found 👸🏿 “" << context->ID()->getText() << "”" << endl;
-  }
-
-  void exitLevel2(TestParser::Level2Context *context) {
-    cout << "Found 🧒🏾 “" << context->ID()->getText() << "”" << endl;
-  }
-
-  void exitLevel3(TestParser::Level3Context *context) {
-    cout << "Found 👼🏻 “" << context->ID()->getText() << "”" << endl;
-  }
-};
+class IdListener : public parser::TestBaseListener {};
 
 int main() {
   const string text =

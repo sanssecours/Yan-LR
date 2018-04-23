@@ -1,8 +1,11 @@
+// Some parts of this grammar were ported from the
+// [ANTLR Python 3 parser](https://github.com/bkiers/python3-parser)
 grammar Test;
 
 @header
 {
 #include <iostream>
+#include <stack>
 }
 
 @postinclude
@@ -11,22 +14,17 @@ using namespace std;
 using namespace antlr4;
 }
 
-@parser::members
+@lexer::members
 {
-bool indent(int spaces) {
-  cout << "indent(" << spaces << "): ";
-  cout << "“" << _input->LT(1)->getText() << "”" << endl;
-  return spaces==0 || (_input->LT(1)->getType() == SPACES &&
-                       _input->LT(1)->getText().length() == spaces);
-}
+private:
+  stack<size_t> indents;
 }
 
-nodes : node+ EOF;
-node : (level1[0] | level2[2] | level3[4]) NL ;
-level1 [int n] : { indent($n) }? ID ;
-level2 [int n] : { indent(2) }? SPACES ID ;
-level3 [int n] : { indent($n) }? SPACES ID ;
+nodes : node+ EOF ;
+node : (ID | NEWLINE | SPACES) ;
 
-NL : '\n' ;
+NEWLINE : '\n' SPACES? {
+
+};
 ID : [a-zA-Z0-9]+ ;
 SPACES : [ ]+ ;
