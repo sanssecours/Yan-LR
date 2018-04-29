@@ -1,8 +1,8 @@
 .PHONY: compile clean configure
 
 run: compile
-	@Build/badger | sed -e 's/<1>/<NEWLINE>/' \
-	                    -e 's/<2>/<ID>/'
+	@sed -E 's~([^=]+)=(.*)~s/<\2>/<\1>/~' Build/Test.tokens > Build/Test.sed
+	@Build/badger | sed -f Build/Test.sed
 
 clean:
 	rm -rf Build
