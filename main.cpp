@@ -2,6 +2,7 @@
 #include "TestLexer.h"
 #include "TestParser.h"
 #include <antlr4-runtime.h>
+#include <fstream>
 #include <iostream>
 
 using namespace parser;
@@ -11,10 +12,11 @@ using namespace std;
 class IdListener : public parser::TestBaseListener {};
 
 int main() {
-  const string text =
-      u8"parent1\n  child1\n  child2\n    grandchild\nparent2\n";
-  cout << "——————————" << endl << text << "——————————" << endl;
-  ANTLRInputStream input(text);
+  ifstream file{"Test.yaml"};
+  stringstream text;
+  text << file.rdbuf();
+  cout << "——————————" << endl << text.str() << "——————————" << endl;
+  ANTLRInputStream input(text.str());
   TestLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
 
