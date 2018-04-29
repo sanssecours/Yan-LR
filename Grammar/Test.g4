@@ -27,7 +27,7 @@ unique_ptr<CommonToken> commonToken(int type, string text, size_t start,
   unique_ptr<CommonToken> token(
       new CommonToken(make_pair(this, _input), type, DEFAULT_TOKEN_CHANNEL,
                       start, stop));
-  return token;
+  return move(token);
 }
 }
 
@@ -38,8 +38,8 @@ NEWLINE : ( '\r'? '\n' ) SPACES? {{
   string newLine = regex_replace(this->getText(), regex("[^\r\n]"), "");
   string spaces = regex_replace(this->getText(), regex("[\r\n]"), "");
   size_t last = getCharIndex() - 1;
-  emit(move(commonToken(NEWLINE, newLine, last - this->getText().length() + 1,
-                        last - spaces.length())));
+  emit(commonToken(NEWLINE, newLine, last - this->getText().length() + 1,
+                   last - spaces.length()));
 }};
 ID : [a-zA-Z0-9]+ ;
 SPACES : [ ]+ ;
