@@ -39,8 +39,7 @@ unique_ptr<CommonToken> commonToken(int type, string text, size_t start,
 public:
 
 void emit(unique_ptr<Token> token) override {
-  CommonToken * tok = dynamic_cast<CommonToken*>(&*token);
-  tokens.push_back(*tok);
+  tokens.push_back(dynamic_cast<CommonToken*>(&*token));
   Lexer::setToken(move(token));
 }
 
