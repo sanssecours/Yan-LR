@@ -65,7 +65,8 @@ NEWLINE : ( '\r'? '\n' ) SPACES? {{
   size_t previous = indents.empty() ? 0 : indents.top();
   if (indentation > previous) {
     indents.push(indentation);
-    emit(commonToken(TestParser::INDENT, spaces, last - spaces.length() + 1, last));
+    emit(commonToken(TestParser::INDENT, spaces, last - spaces.length() + 1,
+                     last));
   }
 }};
 ID : [a-zA-Z0-9]+ ;
