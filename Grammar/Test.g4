@@ -2,6 +2,8 @@
 // [ANTLR Python 3 parser](https://github.com/bkiers/python3-parser)
 grammar Test;
 
+tokens { INDENT, DEDENT }
+
 @header
 {
 #include <iostream>
