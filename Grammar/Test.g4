@@ -26,6 +26,7 @@ using namespace parser;
 private:
 
 stack<size_t> indents;
+list<CommonToken> tokens;
 
 unique_ptr<CommonToken> commonToken(int type, string text, size_t start,
                                     size_t stop) {
@@ -38,7 +39,9 @@ unique_ptr<CommonToken> commonToken(int type, string text, size_t start,
 public:
 
 unique_ptr<Token> nextToken() override {
-  return Lexer::nextToken();
+  unique_ptr<Token> next = Lexer::nextToken();
+  unique_ptr<Token> last(new CommonToken(tokens.back()));
+  return move(tokens.empty() ? next : last);
 }
 
 }
