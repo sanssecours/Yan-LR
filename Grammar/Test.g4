@@ -29,6 +29,13 @@ unique_ptr<CommonToken> commonToken(int type, string text, size_t start,
                       start, stop));
   return move(token);
 }
+
+public:
+
+unique_ptr<Token> nextToken() override {
+  return Lexer::nextToken();
+}
+
 }
 
 nodes : node+ EOF ;
