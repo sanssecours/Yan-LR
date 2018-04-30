@@ -32,7 +32,7 @@ unique_ptr<CommonToken> commonToken(int type, string text, size_t start,
 }
 
 nodes : node+ EOF ;
-node : (ID | NEWLINE | SPACES) ;
+node : INDENT? ID NEWLINE;
 
 NEWLINE : ( '\r'? '\n' ) SPACES? {{
   string newLine = regex_replace(this->getText(), regex("[^\r\n]"), "");
@@ -40,6 +40,12 @@ NEWLINE : ( '\r'? '\n' ) SPACES? {{
   size_t last = getCharIndex() - 1;
   emit(commonToken(NEWLINE, newLine, last - this->getText().length() + 1,
                    last - spaces.length()));
+  size_t indentation = spaces.length();
+
+  size_t previous = indents.empty() ? 0 : indents.top();
+  if (indentation > previous) {
+    indents.push(indentation);
+  }
 }};
 ID : [a-zA-Z0-9]+ ;
 SPACES : [ ]+ ;
