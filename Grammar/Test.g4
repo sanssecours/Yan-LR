@@ -44,9 +44,13 @@ void emit(unique_ptr<Token> token) override {
 }
 
 unique_ptr<Token> nextToken() override {
-  unique_ptr<Token> next = Lexer::nextToken();
-  unique_ptr<Token> last(new CommonToken(tokens.back()));
-  return move(tokens.empty() ? next : last);
+  auto next = Lexer::nextToken();
+  if (tokens.empty()) {
+    return Lexer::nextToken();
+  }
+  unique_ptr<Token> first(new CommonToken(tokens.front()));
+  tokens.pop_front();
+  return move(first);
 }
 
 }
