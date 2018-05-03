@@ -18,7 +18,6 @@ tokens { INDENT, DEDENT }
 {
 using namespace std;
 using namespace antlr4;
-using namespace parser;
 }
 
 @lexer::members
