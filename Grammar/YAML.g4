@@ -32,7 +32,7 @@ public:
   unique_ptr<Token> nextToken() override {
     auto next = Lexer::nextToken();
     if (next->getChannel() == Token::DEFAULT_CHANNEL) {
-      lastToken = dynamic_cast<CommonToken *>(&*next);
+      lastLine = next->getLine();
     }
     if (tokens.empty()) {
       return next;
@@ -45,7 +45,7 @@ public:
 private:
   stack<size_t> indents;
   list<CommonToken> tokens;
-  CommonToken lastToken{YAMLParser::INDENT};
+  int lastLine = 0;
 
   unique_ptr<CommonToken> commonToken(int type, string text, size_t start,
                                       size_t stop) {
@@ -84,7 +84,7 @@ NEWLINE : ( '\r'? '\n' ) SPACES? {
         indents.pop();
         // We use the last index + 1, since the `NEWLINE` in this rule started
         // a new line
-        emit(dedent(lastToken.getLine() + 1));
+        emit(dedent(lastLine + 1));
       }
     } else {
       skip();
