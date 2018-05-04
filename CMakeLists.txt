@@ -2,6 +2,14 @@ cmake_minimum_required (VERSION 3.0)
 
 list (APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake)
 set (CMAKE_CXX_STANDARD 11)
+set (
+  CMAKE_CXX_FLAGS
+  "${CMAKE_CXX_FLAGS} \
+   -fsanitize=address \
+   -fsanitize=undefined \
+   -fsanitize=integer \
+   -fno-omit-frame-pointer"
+  )
 
 execute_process (COMMAND antlr4
                  RESULT_VARIABLE ANTLR_NOT_AVAILABLE OUTPUT_QUIET)
