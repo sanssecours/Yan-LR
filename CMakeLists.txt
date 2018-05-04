@@ -7,12 +7,12 @@ execute_process (COMMAND antlr4
                  RESULT_VARIABLE ANTLR_NOT_AVAILABLE
                  OUTPUT_QUIET)
 if (ANTLR_NOT_AVAILABLE)
-	remove_plugin (yanlr "ANTLR 4 executable (antlr4) not found")
+	message (FATAL_ERROR "ANTLR 4 executable (antlr4) not found")
 endif (ANTLR_NOT_AVAILABLE)
 
 find_package (ANTLR4CPP QUIET)
 if (NOT ANTLR4CPP_FOUND)
-	remove_plugin (yanlr "ANTLR 4 CPP runtime (antlr4-cpp-runtime) not found")
+	message (FATAL_ERROR "ANTLR 4 CPP runtime (antlr4-cpp-runtime) not found")
 endif (NOT ANTLR4CPP_FOUND)
 
 set (GRAMMAR_NAME Test)
