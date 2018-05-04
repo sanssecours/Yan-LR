@@ -35,6 +35,11 @@ unique_ptr<CommonToken> commonToken(int type, string text, size_t start,
   return move(token);
 }
 
+unique_ptr<CommonToken> dedent() {
+  unique_ptr<CommonToken> token{new CommonToken{TestParser::DEDENT}};
+  return move(token);
+}
+
 public:
 
 void emit(unique_ptr<Token> token) override {
@@ -55,7 +60,7 @@ unique_ptr<Token> nextToken() override {
 }
 
 nodes : node+ EOF ;
-node : INDENT? ID NEWLINE;
+node : INDENT? ID NEWLINE DEDENT* ;
 
 NEWLINE : ( '\r'? '\n' ) SPACES? {{
   string newLine = regex_replace(this->getText(), regex("[^\r\n]"), "");
@@ -70,6 +75,13 @@ NEWLINE : ( '\r'? '\n' ) SPACES? {{
     indents.push(indentation);
     emit(commonToken(TestParser::INDENT, spaces, last - spaces.length() + 1,
                      last));
+  } else if (indentation < previous) {
+    while (!indents.empty() && indents.top() > indentation) {
+      indents.pop();
+      emit(dedent());
+    }
+  } else {
+    skip();
   }
 }};
 ID : [a-zA-Z0-9]+ ;
