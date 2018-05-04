@@ -1,6 +1,6 @@
 // Some parts of this grammar were ported from the
 // [ANTLR Python 3 parser](https://github.com/bkiers/python3-parser)
-grammar Test;
+grammar YAML;
 
 tokens { INDENT, DEDENT }
 
@@ -11,7 +11,7 @@ tokens { INDENT, DEDENT }
 #include <regex>
 #include <stack>
 
-#include "TestParser.h"
+#include "YAMLParser.h"
 }
 
 @lexer::postinclude
@@ -36,7 +36,7 @@ unique_ptr<CommonToken> commonToken(int type, string text, size_t start,
 }
 
 unique_ptr<CommonToken> dedent() {
-  unique_ptr<CommonToken> token{new CommonToken{TestParser::DEDENT}};
+  unique_ptr<CommonToken> token{new CommonToken{YAMLParser::DEDENT}};
   return move(token);
 }
 
@@ -73,7 +73,7 @@ NEWLINE : ( '\r'? '\n' ) SPACES? {{
   size_t previous = indents.empty() ? 0 : indents.top();
   if (indentation > previous) {
     indents.push(indentation);
-    emit(commonToken(TestParser::INDENT, spaces, last - spaces.length() + 1,
+    emit(commonToken(YAMLParser::INDENT, spaces, last - spaces.length() + 1,
                      last));
   } else if (indentation < previous) {
     while (!indents.empty() && indents.top() > indentation) {

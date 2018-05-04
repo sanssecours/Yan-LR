@@ -1,6 +1,6 @@
-#include "TestBaseListener.h"
-#include "TestLexer.h"
-#include "TestParser.h"
+#include "YAMLBaseListener.h"
+#include "YAMLLexer.h"
+#include "YAMLParser.h"
 #include <antlr4-runtime.h>
 #include <fstream>
 #include <iostream>
@@ -9,7 +9,7 @@ using namespace parser;
 using namespace antlr4;
 using namespace std;
 
-class IdListener : public parser::TestBaseListener {};
+class IdListener : public parser::YAMLBaseListener {};
 
 int main() {
   ifstream file{"Test.yaml"};
@@ -17,7 +17,7 @@ int main() {
   text << file.rdbuf();
   cout << "——————————" << endl << text.str() << "——————————" << endl;
   ANTLRInputStream input(text.str());
-  TestLexer lexer(&input);
+  YAMLLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
 
   tokens.fill();
@@ -25,7 +25,7 @@ int main() {
     std::cout << token->toString() << std::endl;
   }
 
-  TestParser parser(&tokens);
+  YAMLParser parser(&tokens);
   tree::ParseTreeWalker walker{};
   IdListener listener{};
 

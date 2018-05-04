@@ -14,7 +14,7 @@ if (NOT ANTLR4CPP_FOUND)
   message (FATAL_ERROR "ANTLR 4 CPP runtime (antlr4-cpp-runtime) not found")
 endif (NOT ANTLR4CPP_FOUND)
 
-set (GRAMMAR_NAME Test)
+set (GRAMMAR_NAME YAML)
 set (GRAMMAR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Grammar/${GRAMMAR_NAME}.g4)
 set (GENERATED_SOURCE_FILES_NAMES Lexer Parser BaseListener Listener)
 foreach (file ${GENERATED_SOURCE_FILES_NAMES})
