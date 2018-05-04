@@ -22,24 +22,6 @@ using namespace antlr4;
 
 @lexer::members
 {
-private:
-
-stack<size_t> indents;
-list<CommonToken> tokens;
-
-unique_ptr<CommonToken> commonToken(int type, string text, size_t start,
-                                    size_t stop) {
-  unique_ptr<CommonToken> token(
-      new CommonToken(make_pair(this, _input), type, DEFAULT_TOKEN_CHANNEL,
-                      start, stop));
-  return move(token);
-}
-
-unique_ptr<CommonToken> dedent() {
-  unique_ptr<CommonToken> token{new CommonToken{YAMLParser::DEDENT}};
-  return move(token);
-}
-
 public:
 
 void emit(unique_ptr<Token> token) override {
@@ -57,6 +39,23 @@ unique_ptr<Token> nextToken() override {
   return move(first);
 }
 
+private:
+
+stack<size_t> indents;
+list<CommonToken> tokens;
+
+unique_ptr<CommonToken> commonToken(int type, string text, size_t start,
+                                    size_t stop) {
+  unique_ptr<CommonToken> token(
+      new CommonToken(make_pair(this, _input), type, DEFAULT_TOKEN_CHANNEL,
+                      start, stop));
+  return move(token);
+}
+
+unique_ptr<CommonToken> dedent() {
+  unique_ptr<CommonToken> token{new CommonToken{YAMLParser::DEDENT}};
+  return move(token);
+}
 }
 
 nodes : node+ EOF ;
