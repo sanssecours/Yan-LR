@@ -11,6 +11,7 @@ tokens { INDENT, DEDENT }
 #include <regex>
 #include <stack>
 
+#include "Token.h"
 #include "YAMLParser.h"
 }
 
@@ -30,6 +31,9 @@ public:
 
   unique_ptr<Token> nextToken() override {
     auto next = Lexer::nextToken();
+    if (next->getChannel() == Token::DEFAULT_CHANNEL) {
+      lastToken = dynamic_cast<CommonToken *>(&*next);
+    }
     if (tokens.empty()) {
       return next;
     }
@@ -41,6 +45,7 @@ public:
 private:
   stack<size_t> indents;
   list<CommonToken> tokens;
+  CommonToken lastToken{YAMLParser::INDENT};
 
   unique_ptr<CommonToken> commonToken(int type, string text, size_t start,
                                       size_t stop) {
@@ -49,8 +54,10 @@ private:
     return move(token);
   }
 
-  unique_ptr<CommonToken> dedent() {
+  unique_ptr<CommonToken> dedent(size_t lineNumber) {
     unique_ptr<CommonToken> token{new CommonToken{YAMLParser::DEDENT}};
+    token->setLine(lineNumber);
+    token->setCharPositionInLine(0);
     return move(token);
   }
 }
@@ -75,7 +82,9 @@ NEWLINE : ( '\r'? '\n' ) SPACES? {
     } else if (indentation < previous) {
       while (!indents.empty() && indents.top() > indentation) {
         indents.pop();
-        emit(dedent());
+        // We use the last index + 1, since the `NEWLINE` in this rule started
+        // a new line
+        emit(dedent(lastToken.getLine() + 1));
       }
     } else {
       skip();
