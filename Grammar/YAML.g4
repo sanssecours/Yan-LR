@@ -31,7 +31,7 @@ public:
   unique_ptr<Token> nextToken() override {
     auto next = Lexer::nextToken();
     if (tokens.empty()) {
-      return Lexer::nextToken();
+      return next;
     }
     unique_ptr<Token> first(new CommonToken(tokens.front()));
     tokens.pop_front();
