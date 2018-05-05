@@ -62,8 +62,8 @@ private:
   }
 }
 
-nodes : node+ EOF ;
-node : INDENT? ID NEWLINE DEDENT* ;
+node : scalar EOF ;
+scalar : ID NEWLINE ;
 
 NEWLINE : ( '\r'? '\n' ) SPACES? {
   {

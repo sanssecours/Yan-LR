@@ -29,7 +29,7 @@ int main() {
   tree::ParseTreeWalker walker{};
   IdListener listener{};
 
-  antlr4::tree::ParseTree *tree = parser.nodes();
+  antlr4::tree::ParseTree *tree = parser.node();
   walker.walk(&listener, tree);
   return 0;
 }
