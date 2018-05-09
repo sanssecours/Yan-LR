@@ -44,7 +44,7 @@ private:
   list<CommonToken> tokens;
   int lastLine = 0;
 
-  unique_ptr<CommonToken> commonToken(int type, string text, size_t start,
+  unique_ptr<CommonToken> commonToken(size_t type, string text, size_t start,
                                       size_t stop) {
     unique_ptr<CommonToken> token(new CommonToken(
         make_pair(this, _input), type, DEFAULT_TOKEN_CHANNEL, start, stop));
