@@ -30,16 +30,13 @@ public:
   }
 
   unique_ptr<Token> nextToken() override {
-    auto next = Lexer::nextToken();
+    Lexer::nextToken();
+    unique_ptr<Token> next(new CommonToken(tokens.front()));
+    tokens.pop_front();
     if (next->getChannel() == Token::DEFAULT_CHANNEL) {
       lastLine = next->getLine();
     }
-    if (tokens.empty()) {
-      return next;
-    }
-    unique_ptr<Token> first(new CommonToken(tokens.front()));
-    tokens.pop_front();
-    return move(first);
+    return move(next);
   }
 
 private:
