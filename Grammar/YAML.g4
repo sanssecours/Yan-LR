@@ -44,6 +44,12 @@ private:
   list<CommonToken> tokens;
   int lastLine = 0;
 
+  unique_ptr<CommonToken> commonToken(size_t type, string text) {
+    size_t stop = getCharIndex() - 1;
+    size_t start = text.length() <= 0 ? stop : stop - text.length() + 1;
+    return move(commonToken(type, text, start, stop));
+  }
+
   unique_ptr<CommonToken> commonToken(size_t type, string text, size_t start,
                                       size_t stop) {
     unique_ptr<CommonToken> token(new CommonToken(
