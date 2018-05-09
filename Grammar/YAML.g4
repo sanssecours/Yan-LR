@@ -40,8 +40,8 @@ public:
   }
 
 private:
-  stack<size_t> indents;
-  list<CommonToken> tokens;
+  stack<size_t> indents{deque<size_t>{0}};
+  deque<CommonToken> tokens{dynamic_cast<CommonToken *>(&*indent(0))};
   int lastLine = 0;
 
   unique_ptr<CommonToken> commonToken(size_t type, string text) {
@@ -59,6 +59,13 @@ private:
 
   unique_ptr<CommonToken> dedent(size_t lineNumber) {
     unique_ptr<CommonToken> token{new CommonToken{YAMLParser::DEDENT}};
+    token->setLine(lineNumber);
+    token->setCharPositionInLine(0);
+    return move(token);
+  }
+
+  unique_ptr<CommonToken> indent(size_t lineNumber) {
+    unique_ptr<CommonToken> token{new CommonToken{YAMLParser::INDENT}};
     token->setLine(lineNumber);
     token->setCharPositionInLine(0);
     return move(token);
