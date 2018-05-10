@@ -40,7 +40,9 @@ public:
         tokens.pop_back();
       }
 
-      emit(commonToken(YAMLParser::NEWLINE, "\n"));
+      if (tokens.back().getType() != YAMLParser::NEWLINE) {
+        emit(commonToken(YAMLParser::NEWLINE, "\n"));
+      }
 
       // Emit missing DEDENT tokens
       while (!indents.empty()) {
