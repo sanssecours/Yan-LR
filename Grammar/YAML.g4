@@ -36,8 +36,8 @@ public:
       // Remove trailing EOF tokens
       // These tokens are emitted by nextToken if there is no
       // input left.
-      while (!tokens.empty() && tokens.front().getType() == EOF) {
-        tokens.pop_front();
+      while (!tokens.empty() && tokens.back().getType() == EOF) {
+        tokens.pop_back();
       }
 
       emit(commonToken(YAMLParser::NEWLINE, "\n"));
