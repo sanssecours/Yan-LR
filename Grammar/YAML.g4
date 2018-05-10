@@ -31,6 +31,26 @@ public:
 
   unique_ptr<Token> nextToken() override {
     Lexer::nextToken();
+
+    if (_input->LA(1) == EOF && !indents.empty()) {
+      // Remove trailing EOF tokens
+      // These tokens are emitted by nextToken if there is no
+      // input left.
+      while (!tokens.empty() && tokens.front().getType() == EOF) {
+        tokens.pop_front();
+      }
+
+      emit(commonToken(YAMLParser::NEWLINE, "\n"));
+
+      // Emit missing DEDENT tokens
+      while (!indents.empty()) {
+        indents.pop();
+        emit(dedent(lastLine + 1));
+      }
+
+      emit(commonToken(EOF, "<EOF>"));
+    }
+
     unique_ptr<Token> next(new CommonToken(tokens.front()));
     tokens.pop_front();
     if (next->getChannel() == Token::DEFAULT_CHANNEL) {
@@ -40,7 +60,7 @@ public:
   }
 
 private:
-  stack<size_t> indents{deque<size_t>{0}};
+  stack<int> indents{deque<int>{-1}};
   deque<CommonToken> tokens{dynamic_cast<CommonToken *>(&*indent(0))};
   int lastLine = 0;
 
