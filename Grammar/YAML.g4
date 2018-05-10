@@ -92,7 +92,8 @@ private:
   }
 }
 
-node : scalar EOF ;
+node : INDENT (scalar | list) DEDENT EOF ;
+list : '-' SPACE scalar ;
 scalar : ID NEWLINE ;
 
 NEWLINE : ( '\r'? '\n' ) SPACES? {
@@ -122,4 +123,5 @@ NEWLINE : ( '\r'? '\n' ) SPACES? {
   }
 };
 ID : [a-zA-Z0-9]+ ;
-SPACES : [ ]+ ;
+SPACE : ' ' ;
+SPACES : SPACE+ ;
