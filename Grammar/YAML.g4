@@ -48,7 +48,7 @@ public:
         emit(dedent(lastLine + 1));
       }
 
-      emit(commonToken(EOF, "<EOF>"));
+      emit(commonToken(EOF, "EOF", getCharIndex(), getCharIndex()));
     }
 
     unique_ptr<Token> next(new CommonToken(tokens.front()));
