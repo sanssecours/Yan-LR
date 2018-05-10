@@ -62,7 +62,7 @@ public:
   }
 
 private:
-  stack<int> indents{deque<int>{-1}};
+  stack<int> indents{deque<int>{0}};
   deque<CommonToken> tokens{dynamic_cast<CommonToken *>(&*indent(0))};
   int lastLine = 0;
 
