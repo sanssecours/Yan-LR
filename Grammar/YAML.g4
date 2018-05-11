@@ -94,8 +94,9 @@ private:
   }
 }
 
-node : INDENT (scalar | list) DEDENT EOF ;
-list : ('-' SPACE scalar)+ ;
+node : INDENT (scalar | list)+ DEDENT EOF ;
+list : ('-' SPACE scalar)+
+     | ('-' SPACE? NEWLINE) INDENT (scalar | list) DEDENT ;
 scalar : ID NEWLINE ;
 
 NEWLINE : ( '\r'? '\n' ) SPACES? {
