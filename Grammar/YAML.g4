@@ -94,9 +94,11 @@ private:
   }
 }
 
-node : INDENT (scalar | list)+ DEDENT EOF ;
-list : ('-' SPACE scalar)+
-     | ('-' SPACE? NEWLINE) INDENT (scalar | list) DEDENT ;
+yaml : child EOF ;
+child : INDENT (scalar | sequence) DEDENT ;
+sequence : element+ ;
+element : '-' SPACE scalar
+        | '-' SPACE? NEWLINE child ;
 scalar : ID NEWLINE ;
 
 NEWLINE : ( '\r'? '\n' ) SPACES? {
