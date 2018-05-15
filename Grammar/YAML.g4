@@ -94,12 +94,16 @@ private:
   }
 }
 
+// -- Parser Rules -------------------------------------------------------------
+
 yaml : child EOF ;
 child : INDENT (scalar | sequence) DEDENT ;
 sequence : element+ ;
 element : '-' SPACE scalar
         | '-' SPACE? NEWLINE child ;
 scalar : ID NEWLINE ;
+
+// -- Lexer Rules --------------------------------------------------------------
 
 NEWLINE : ( '\r'? '\n' ) SPACES? {
   {
