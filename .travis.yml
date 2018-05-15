@@ -1,0 +1,17 @@
+language: cpp
+
+matrix:
+  include:
+    - os: osx
+
+before_install:
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      brew install antlr
+      brew install antlr4-cpp-runtime
+      brew install llvm
+      brew install ninja
+    fi
+
+script:
+  - make configure run
