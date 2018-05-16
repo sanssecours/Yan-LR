@@ -113,10 +113,11 @@ nb_double_text : nb_double_one_line ;
 nb_double_one_line : nb_double_char* ;
 
 nb_json_minus_backslash_double_quote : S_TAB
-                                    | S_SPACE | '!'
-                                    | HASH_TILL_BRACKET_OPEN
-                                    | BRACKET_CLOSED_TILL_END
-                                    ;
+                                     | S_SPACE
+                                     | C_TAG
+                                     | HASH_TILL_BRACKET_OPEN
+                                     | BRACKET_CLOSED_TILL_END
+                                     ;
 
 // -- Lexer Rules --------------------------------------------------------------
 
