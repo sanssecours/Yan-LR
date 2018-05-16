@@ -34,6 +34,9 @@ int main() {
   IdListener listener{};
 
   antlr4::tree::ParseTree *tree = parser.yaml();
+  cout << "——————————" << endl;
+  cout << tree->toStringTree() << endl;
+  cout << "——————————" << endl;
   walker.walk(&listener, tree);
   return 0;
 }
