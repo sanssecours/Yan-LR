@@ -104,13 +104,19 @@ element : C_SEQUENCE_ENTRY S_SPACE scalar
 scalar : (c_double_quoted | nb_double_text) NEWLINE ;
 
 // [107]
-nb_double_char : C_NS_ESC_CHAR | NB_JSON_MINUS_BACKSLASH_DOUBLE_QUOTE ;
+nb_double_char : C_NS_ESC_CHAR | nb_json_minus_backslash_double_quote ;
 // [109]
 c_double_quoted : '"' nb_double_text '"' ;
 // [110]
 nb_double_text : nb_double_one_line ;
 // [111]
 nb_double_one_line : nb_double_char* ;
+
+nb_json_minus_backslash_double_quote : S_TAB
+                                    | S_SPACE | '!'
+                                    | HASH_TILL_BRACKET_OPEN
+                                    | BRACKET_CLOSED_TILL_END
+                                    ;
 
 // -- Lexer Rules --------------------------------------------------------------
 
@@ -141,14 +147,13 @@ NEWLINE : ( '\r'? '\n' ) S_SPACE* {
   }
 };
 
-fragment TAB : '\t' ;
 fragment LF : '\n' ;
 fragment CR : '\r' ;
 
 // [31]
 S_SPACE : ' ' ;
 // [32]
-fragment S_TAB : TAB ;
+S_TAB : '\t' ;
 
 // [4]
 C_SEQUENCE_ENTRY : '-' ;
@@ -215,16 +220,13 @@ fragment C_INDICATOR : C_SEQUENCE_ENTRY
                      | C_RESERVED
                      ;
 
-NB_JSON_MINUS_BACKSLASH_DOUBLE_QUOTE : TAB
-                                    | [\u0020-\u0021]
-                                    | [\u0023-\u005B]
-                                    | [\u005D-\u{10FFFF}]
-                                    ;
+HASH_TILL_BRACKET_OPEN : [\u0023-\u005B] ;
+BRACKET_CLOSED_TILL_END : [\u005D-\u{10FFFF}] ;
 
 // [2] Quoted YAML scalars can contain almost all characters, except most of
 //     the characters from the C0 control block. This rule ensures
 //     compatibility with JSON.
-NB_JSON : TAB | [\u0020-\u{10FFFF}] ;
+NB_JSON : S_TAB | [\u0020-\u{10FFFF}] ;
 
 // [35]
 fragment NS_DEC_DIGIT : [0-9] ;
@@ -240,7 +242,7 @@ fragment NS_ESC_BELL : 'a' ;
 // [44]
 fragment NS_ESC_BACKSPACE : 'b' ;
 // [45]
-fragment NS_ESC_HORIZONTAL_TAB : 't' | TAB ;
+fragment NS_ESC_HORIZONTAL_TAB : 't' | S_TAB ;
 // [46]
 fragment NS_ESC_LINE_FEED : 'n' ;
 // [47]
