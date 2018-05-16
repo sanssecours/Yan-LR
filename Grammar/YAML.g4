@@ -147,9 +147,6 @@ NEWLINE : ( '\r'? '\n' ) S_SPACE* {
   }
 };
 
-fragment LF : '\n' ;
-fragment CR : '\r' ;
-
 // [31]
 S_SPACE : ' ' ;
 // [32]
