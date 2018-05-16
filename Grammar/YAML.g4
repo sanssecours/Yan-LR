@@ -99,13 +99,22 @@ private:
 yaml : child EOF ;
 child : INDENT (scalar | sequence) DEDENT ;
 sequence : element+ ;
-element : '-' SPACE scalar
-        | '-' SPACE? NEWLINE child ;
-scalar : ID NEWLINE ;
+element : C_SEQUENCE_ENTRY S_SPACE scalar
+        | C_SEQUENCE_ENTRY S_SPACE? NEWLINE child ;
+scalar : (c_double_quoted | nb_double_text) NEWLINE ;
+
+// [107]
+nb_double_char : C_NS_ESC_CHAR | NB_JSON_MINUS_BACKSLASH_DOUBLE_QUOTE ;
+// [109]
+c_double_quoted : '"' nb_double_text '"' ;
+// [110]
+nb_double_text : nb_double_one_line ;
+// [111]
+nb_double_one_line : nb_double_char* ;
 
 // -- Lexer Rules --------------------------------------------------------------
 
-NEWLINE : ( '\r'? '\n' ) SPACES? {
+NEWLINE : ( '\r'? '\n' ) S_SPACE* {
   {
     string newLine = regex_replace(this->getText(), regex("[^\r\n]"), "");
     string spaces = regex_replace(this->getText(), regex("[\r\n]"), "");
@@ -131,39 +140,96 @@ NEWLINE : ( '\r'? '\n' ) SPACES? {
     }
   }
 };
-ID : [a-zA-Z0-9]+ ;
-SPACE : ' ' ;
-SPACES : SPACE+ ;
-
-/* ===================== */
-/* = 5.1 Character Set = */
-/* ===================== */
 
 fragment TAB : '\t' ;
 fragment LF : '\n' ;
 fragment CR : '\r' ;
 
-/* ============================== */
-/* = 5.5 White Space Characters = */
-/* ============================== */
-
 // [31]
-fragment S_SPACE : ' ' ;
+S_SPACE : ' ' ;
 // [32]
 fragment S_TAB : TAB ;
 
-/* ================================ */
-/* = 5.6 Miscellaneous Characters = */
-/* ================================ */
+// [4]
+C_SEQUENCE_ENTRY : '-' ;
+// [5]
+C_MAPPING_KEY : '?' ;
+// [6]
+C_MAPPING_VALUE : ':' ;
+
+// [7]
+C_COLLECT_ENTRY : ',' ;
+// [8]
+C_SEQUENCE_START : '[' ;
+// [9]
+C_SEQUENCE_END : ']' ;
+// [10]
+C_MAPPING_START : '{' ;
+// [11]
+C_MAPPING_END : '}' ;
+
+// [12]
+C_COMMENT : '#' ;
+
+// [13]
+C_ANCHOR : '&' ;
+// [14]
+C_ALIAS : '*' ;
+// [15]
+C_TAG : '!' ;
+
+// [16]
+C_LITERAL : '|' ;
+// [17]
+C_FOLDED : '>' ;
+
+// [18]
+C_SINGLE_QUOTE : '\'' ;
+// [19]
+C_DOUBLE_QUOTE : '"' ;
+
+// [20]
+C_DIRECTIVE : '%' ;
+
+// [21]
+C_RESERVED : '@' | '`' ;
+
+// [22]
+fragment C_INDICATOR : C_SEQUENCE_ENTRY
+                     | C_MAPPING_KEY
+                     | C_MAPPING_VALUE
+                     | C_COLLECT_ENTRY
+                     | C_SEQUENCE_START
+                     | C_SEQUENCE_END
+                     | C_MAPPING_START
+                     | C_MAPPING_END
+                     | C_COMMENT
+                     | C_ANCHOR
+                     | C_ALIAS
+                     | C_TAG
+                     | C_LITERAL
+                     | C_FOLDED
+                     | C_SINGLE_QUOTE
+                     | C_DOUBLE_QUOTE
+                     | C_DIRECTIVE
+                     | C_RESERVED
+                     ;
+
+NB_JSON_MINUS_BACKSLASH_DOUBLE_QUOTE : TAB
+                                    | [\u0020-\u0021]
+                                    | [\u0023-\u005B]
+                                    | [\u005D-\u{10FFFF}]
+                                    ;
+
+// [2] Quoted YAML scalars can contain almost all characters, except most of
+//     the characters from the C0 control block. This rule ensures
+//     compatibility with JSON.
+NB_JSON : TAB | [\u0020-\u{10FFFF}] ;
 
 // [35]
 fragment NS_DEC_DIGIT : [0-9] ;
 // [36]
 fragment NS_HEX_DIGIT : NS_DEC_DIGIT | [A-F] | [a-f] ;
-
-/* ========================== */
-/* = 5.7 Escaped Characters = */
-/* ========================== */
 
 // [41]
 fragment C_ESCAPE : '\\' ;
