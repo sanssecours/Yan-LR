@@ -213,7 +213,6 @@ fragment C_INDICATOR : C_SEQUENCE_ENTRY
                      | C_LITERAL
                      | C_FOLDED
                      | C_SINGLE_QUOTE
-                     | C_DOUBLE_QUOTE
                      | C_DIRECTIVE
                      | C_RESERVED
                      ;
