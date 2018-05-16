@@ -9,7 +9,11 @@ using namespace parser;
 using namespace antlr4;
 using namespace std;
 
-class IdListener : public parser::YAMLBaseListener {};
+class IdListener : public parser::YAMLBaseListener {
+  virtual void exitScalar(YAMLParser::ScalarContext *context) override {
+    cout << "Matched scalar “" << context->getText() << "”" << endl;
+  }
+};
 
 int main() {
   ifstream file{"Test.yaml"};
