@@ -114,7 +114,6 @@ nb_double_one_line : nb_double_char* ;
 
 nb_json_minus_backslash_double_quote : S_TAB
                                      | S_SPACE
-                                     | C_TAG
                                      | HASH_TILL_BRACKET_OPEN
                                      | BRACKET_CLOSED_TILL_END
                                      ;
@@ -147,11 +146,6 @@ NEWLINE : ( '\r'? '\n' ) S_SPACE* {
     }
   }
 };
-
-// [31]
-S_SPACE : ' ' ;
-// [32]
-S_TAB : '\t' ;
 
 // [4]
 C_SEQUENCE_ENTRY : '-' ;
@@ -217,7 +211,31 @@ fragment C_INDICATOR : C_SEQUENCE_ENTRY
                      | C_RESERVED
                      ;
 
-HASH_TILL_BRACKET_OPEN : [\u0023-\u005B] ;
+// [31]
+S_SPACE : ' ' ;
+// [32]
+S_TAB : '\t' ;
+
+HASH_TILL_BRACKET_OPEN : C_SEQUENCE_ENTRY
+                       | C_MAPPING_KEY
+                       | C_MAPPING_VALUE
+                       | C_COLLECT_ENTRY
+                       | C_SEQUENCE_START
+                       | C_SEQUENCE_END
+                       | C_MAPPING_START
+                       | C_MAPPING_END
+                       | C_COMMENT
+                       | C_ANCHOR
+                       | C_ALIAS
+                       | C_TAG
+                       | C_LITERAL
+                       | C_FOLDED
+                       | C_SINGLE_QUOTE
+                       | C_DOUBLE_QUOTE
+                       | C_DIRECTIVE
+                       | C_RESERVED
+                       | [\u0023-\u005B] ;
+
 BRACKET_CLOSED_TILL_END : [\u005D-\u{10FFFF}] ;
 
 // [2] Quoted YAML scalars can contain almost all characters, except most of
