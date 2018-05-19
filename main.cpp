@@ -26,7 +26,7 @@ int main() {
 
   tokens.fill();
   for (auto token : tokens.getTokens()) {
-    std::cout << token->toString() << std::endl;
+    cout << token->toString() << endl;
   }
 
   YAMLParser parser(&tokens);
