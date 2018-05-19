@@ -12,5 +12,6 @@ private:
                            const std::string &message,
                            std::exception_ptr error) override {
     cerr << message << endl;
+    exit(EXIT_FAILURE);
   }
 };
