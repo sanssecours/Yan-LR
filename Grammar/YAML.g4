@@ -101,14 +101,12 @@ child : INDENT (scalar | sequence) DEDENT ;
 sequence : element+ ;
 element : C_SEQUENCE_ENTRY S_SPACE scalar
         | C_SEQUENCE_ENTRY S_SPACE? NEWLINE child ;
-scalar : (c_double_quoted | nb_double_text) NEWLINE ;
+scalar : (c_double_quoted | nb_double_one_line) NEWLINE ;
 
 // [107]
 nb_double_char : C_NS_ESC_CHAR | nb_json_minus_backslash_double_quote ;
 // [109]
-c_double_quoted : '"' nb_double_text '"' ;
-// [110]
-nb_double_text : nb_double_one_line ;
+c_double_quoted : '"' nb_double_one_line '"' ;
 // [111]
 nb_double_one_line : nb_double_char* ;
 
