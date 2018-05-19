@@ -26,7 +26,7 @@ foreach (file ${GENERATED_SOURCE_FILES_NAMES})
   set_source_files_properties (${filepath} PROPERTIES GENERATED TRUE)
   list (APPEND GENERATED_SOURCE_FILES ${filepath})
 endforeach (file ${GENERATED_SOURCE_FILES_NAMES})
-set (SOURCE_FILES "${GENERATED_SOURCE_FILES}" main.cpp ErrorListener.cpp)
+set (SOURCE_FILES "${GENERATED_SOURCE_FILES}" main.cpp ErrorListener.hpp)
 
 add_custom_command (OUTPUT ${GENERATED_SOURCE_FILES}
                     COMMAND antlr4 -Werror -Dlanguage=Cpp -o
