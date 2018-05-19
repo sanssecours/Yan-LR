@@ -1,3 +1,4 @@
+#include "ErrorListener.hpp"
 #include "YAMLBaseListener.h"
 #include "YAMLLexer.h"
 #include "YAMLParser.h"
@@ -30,6 +31,10 @@ int main() {
   }
 
   YAMLParser parser(&tokens);
+  ErrorListener errorListener{};
+  parser.removeErrorListeners();
+  parser.addErrorListener(&errorListener);
+
   tree::ParseTreeWalker walker{};
   IdListener listener{};
 
