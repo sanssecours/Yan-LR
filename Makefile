@@ -1,5 +1,5 @@
 GRAMMAR := YAML
-export ASAN_OPTIONS := detect_leaks=1
+export ASAN_OPTIONS := detect_leaks=1,detect_container_overflow=0
 export CC := /usr/local/opt/llvm/bin/clang
 export CXX := /usr/local/opt/llvm/bin/clang++
 
@@ -8,8 +8,7 @@ export CXX := /usr/local/opt/llvm/bin/clang++
 run: compile
 	@sed -E 's~([^=]+)=(.*)~s/<\2>/<\1>/~' Build/$(GRAMMAR).tokens > \
 	     Build/$(GRAMMAR).sed
-	@ASAN_OPTIONS=detect_container_overflow=0 Build/badger | \
-	                                          sed -f Build/$(GRAMMAR).sed
+	Build/badger | sed -f Build/$(GRAMMAR).sed
 
 clean:
 	rm -rf Build
