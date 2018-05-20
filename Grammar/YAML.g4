@@ -112,9 +112,34 @@ nb_double_one_line : nb_double_char* ;
 
 nb_json_minus_backslash_double_quote : S_TAB
                                      | S_SPACE
-                                     | HASH_TILL_BRACKET_OPEN
-                                     | BRACKET_CLOSED_TILL_END
+                                     | hash_till_bracket_open
+                                     | bracket_closed_till_end
                                      ;
+
+/* # = 23, [ = 5B */
+hash_till_bracket_open : C_SEQUENCE_ENTRY
+                       | C_MAPPING_KEY
+                       | C_MAPPING_VALUE
+                       | C_COLLECT_ENTRY
+                       | C_SEQUENCE_START
+                       | C_COMMENT
+                       | C_ANCHOR
+                       | C_ALIAS
+                       | C_TAG
+                       | C_LITERAL
+                       | C_FOLDED
+                       | C_SINGLE_QUOTE
+                       | C_DIRECTIVE
+                       | C_RESERVED_AT
+                       | HASH_TILL_BRACKET_OPEN ;
+
+/* ] = 5D */
+bracket_closed_till_end : C_SEQUENCE_END
+                        | C_RESERVED_TICK
+                        | C_MAPPING_START
+                        | C_MAPPING_END
+                        | BRACKET_CLOSED_TILL_END
+                        ;
 
 // -- Lexer Rules --------------------------------------------------------------
 
@@ -187,33 +212,15 @@ C_DOUBLE_QUOTE : '"' ;
 C_DIRECTIVE : '%' ;
 
 // [21]
-C_RESERVED : '@' | '`' ;
+C_RESERVED_AT : '@' ;
+C_RESERVED_TICK : '`' ;
 
 // [31]
 S_SPACE : ' ' ;
 // [32]
 S_TAB : '\t' ;
 
-HASH_TILL_BRACKET_OPEN : C_SEQUENCE_ENTRY
-                       | C_MAPPING_KEY
-                       | C_MAPPING_VALUE
-                       | C_COLLECT_ENTRY
-                       | C_SEQUENCE_START
-                       | C_SEQUENCE_END
-                       | C_MAPPING_START
-                       | C_MAPPING_END
-                       | C_COMMENT
-                       | C_ANCHOR
-                       | C_ALIAS
-                       | C_TAG
-                       | C_LITERAL
-                       | C_FOLDED
-                       | C_SINGLE_QUOTE
-                       | C_DOUBLE_QUOTE
-                       | C_DIRECTIVE
-                       | C_RESERVED
-                       | [\u0023-\u005B] ;
-
+HASH_TILL_BRACKET_OPEN : [\u0023-\u005B] ;
 BRACKET_CLOSED_TILL_END : [\u005D-\u{10FFFF}] ;
 
 // [2] Quoted YAML scalars can contain almost all characters, except most of
