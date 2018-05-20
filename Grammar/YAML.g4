@@ -39,7 +39,8 @@ public:
         tokens.pop_back();
       }
 
-      if (tokens.back().getType() != YAMLParser::NEWLINE) {
+      if (tokens.back().getType() != YAMLParser::NEWLINE &&
+          tokens.back().getType() != YAMLParser::DEDENT) {
         emit(commonToken(YAMLParser::NEWLINE, "\n"));
       }
 
