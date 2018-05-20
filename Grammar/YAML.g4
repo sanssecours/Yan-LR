@@ -11,7 +11,6 @@ tokens { INDENT, DEDENT }
 #include <regex>
 #include <stack>
 
-#include "Token.h"
 #include "YAMLParser.h"
 }
 
@@ -188,26 +187,6 @@ C_DIRECTIVE : '%' ;
 
 // [21]
 C_RESERVED : '@' | '`' ;
-
-// [22]
-fragment C_INDICATOR : C_SEQUENCE_ENTRY
-                     | C_MAPPING_KEY
-                     | C_MAPPING_VALUE
-                     | C_COLLECT_ENTRY
-                     | C_SEQUENCE_START
-                     | C_SEQUENCE_END
-                     | C_MAPPING_START
-                     | C_MAPPING_END
-                     | C_COMMENT
-                     | C_ANCHOR
-                     | C_ALIAS
-                     | C_TAG
-                     | C_LITERAL
-                     | C_FOLDED
-                     | C_SINGLE_QUOTE
-                     | C_DIRECTIVE
-                     | C_RESERVED
-                     ;
 
 // [31]
 S_SPACE : ' ' ;
