@@ -223,11 +223,6 @@ S_TAB : '\t' ;
 HASH_TILL_BRACKET_OPEN : [\u0023-\u005B] ;
 BRACKET_CLOSED_TILL_END : [\u005D-\u{10FFFF}] ;
 
-// [2] Quoted YAML scalars can contain almost all characters, except most of
-//     the characters from the C0 control block. This rule ensures
-//     compatibility with JSON.
-NB_JSON : S_TAB | [\u0020-\u{10FFFF}] ;
-
 // [35]
 fragment NS_DEC_DIGIT : [0-9] ;
 // [36]
