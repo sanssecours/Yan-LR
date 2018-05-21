@@ -153,10 +153,10 @@ bracket_closed_till_end : C_SEQUENCE_END
 
 NEWLINE : ( '\r'? '\n' ) S_SPACE* {
   {
-    string newLine = regex_replace(this->getText(), regex("[^\r\n]"), "");
-    string spaces = regex_replace(this->getText(), regex("[\r\n]"), "");
+    string newLine = regex_replace(getText(), regex("[^\r\n]"), "");
+    string spaces = regex_replace(getText(), regex("[\r\n]"), "");
     size_t last = getCharIndex() - 1;
-    emit(commonToken(NEWLINE, newLine, last - this->getText().length() + 1,
+    emit(commonToken(NEWLINE, newLine, last - getText().length() + 1,
                      last - spaces.length()));
     size_t indentation = spaces.length();
 
