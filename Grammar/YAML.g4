@@ -112,42 +112,208 @@ element : C_SEQUENCE_ENTRY S_SPACE scalar
 scalar : (c_double_quoted | nb_double_one_line) NEWLINE ;
 
 // [107]
-nb_double_char : C_NS_ESC_CHAR | nb_json_minus_backslash_double_quote ;
+nb_double_char : c_ns_esc_char | nb_json_minus_backslash_double_quote ;
 // [109]
 c_double_quoted : '"' nb_double_one_line '"' ;
 // [111]
 nb_double_one_line : nb_double_char* ;
 
-nb_json_minus_backslash_double_quote : S_TAB
-                                     | S_SPACE
-                                     | hash_till_bracket_open
-                                     | bracket_closed_till_end
+nb_json_minus_backslash_double_quote : c_printable_7_bit_without_indicators
+                                     | c_indicator_without_quotes
+                                     | '\''
+                                     | '\u007F'
+                                     | C_PRINTABLE_16_BIT
+                                     | NB_JSON
                                      ;
 
-/* # = 23, [ = 5B */
-hash_till_bracket_open : C_SEQUENCE_ENTRY
-                       | C_MAPPING_KEY
-                       | C_MAPPING_VALUE
-                       | C_COLLECT_ENTRY
-                       | C_SEQUENCE_START
-                       | C_COMMENT
-                       | C_ANCHOR
-                       | C_ALIAS
-                       | C_TAG
-                       | C_LITERAL
-                       | C_FOLDED
-                       | C_SINGLE_QUOTE
-                       | C_DIRECTIVE
-                       | C_RESERVED_AT
-                       | HASH_TILL_BRACKET_OPEN ;
+c_indicator_without_quotes : C_SEQUENCE_ENTRY
+                           | C_MAPPING_KEY
+                           | C_MAPPING_VALUE
+                           | C_COLLECT_ENTRY
+                           | C_SEQUENCE_START
+                           | C_SEQUENCE_END
+                           | C_MAPPING_START
+                           | C_MAPPING_END
+                           | C_COMMENT
+                           | C_ANCHOR
+                           | C_ALIAS
+                           | C_TAG
+                           | C_LITERAL
+                           | C_FOLDED
+                           | C_DIRECTIVE
+                           | C_RESERVED
+                           ;
 
-/* ] = 5D */
-bracket_closed_till_end : C_SEQUENCE_END
-                        | C_RESERVED_TICK
-                        | C_MAPPING_START
-                        | C_MAPPING_END
-                        | BRACKET_CLOSED_TILL_END
-                        ;
+// [22]
+c_indicator : c_indicator_without_quotes
+            | C_SINGLE_QUOTE
+            | C_DOUBLE_QUOTE
+            ;
+
+// [35]
+ns_dec_digit : '0'
+             | '1'
+             | '2'
+             | '3'
+             | '4'
+             | '5'
+             | '6'
+             | '7'
+             | '8'
+             | '9'
+             ;
+
+ns_letter_lower_af : 'a'
+                   | 'b'
+                   | 'c'
+                   | 'd'
+                   | 'e'
+                   | 'f'
+                   ;
+
+ns_letter_upper_af : 'A'
+                   | 'B'
+                   | 'C'
+                   | 'D'
+                   | 'E'
+                   | 'F'
+                   ;
+// [36]
+ns_hex_digit : ns_dec_digit
+             | ns_letter_lower_af
+             | ns_letter_upper_af
+             ;
+
+ns_letter_lower : ns_letter_lower_af
+                | 'g'
+                | 'h'
+                | 'i'
+                | 'j'
+                | 'k'
+                | 'l'
+                | 'm'
+                | 'n'
+                | 'o'
+                | 'p'
+                | 'q'
+                | 'r'
+                | 's'
+                | 't'
+                | 'u'
+                | 'v'
+                | 'w'
+                | 'x'
+                | 'y'
+                | 'z'
+                ;
+
+ns_letter_upper : ns_letter_upper_af
+                | 'G'
+                | 'H'
+                | 'I'
+                | 'J'
+                | 'K'
+                | 'L'
+                | 'M'
+                | 'N'
+                | 'O'
+                | 'P'
+                | 'Q'
+                | 'R'
+                | 'S'
+                | 'T'
+                | 'U'
+                | 'V'
+                | 'W'
+                | 'X'
+                | 'Y'
+                | 'Z'
+                ;
+
+// [37]
+ns_ascii_letter : ns_letter_lower | ns_letter_upper ;
+
+// [38]
+ns_word_char : ns_dec_digit | ns_ascii_letter | '-' ;
+
+c_printable_7_bit_without_indicators : S_TAB
+                                     | S_SPACE
+                                     | '$'
+                                     | '('
+                                     | ')'
+                                     | '+'
+                                     | '.'
+                                     | '/'
+                                     | ns_word_char
+                                     | ';'
+                                     | '<'
+                                     | '='
+                                     | '>'
+                                     | '\\'
+                                     | '^'
+                                     | '_'
+                                     | '|'
+                                     | '~'
+                                     ;
+
+// [41]
+c_escape : '\\' ;
+// [42]
+ns_esc_null : '0' ;
+// [43]
+ns_esc_bell : 'a' ;
+// [44]
+ns_esc_backspace : 'b' ;
+// [45]
+ns_esc_horizontal_tab : 't' | S_TAB ;
+// [46]
+ns_esc_line_feed : 'n' ;
+// [47]
+ns_esc_vertical_tab : 'v' ;
+// [48]
+ns_esc_form_feed : 'f' ;
+// [49]
+ns_esc_carriage_return : 'r' ;
+// [50]
+ns_esc_escape : 'e' ;
+// [51]
+ns_esc_space : ' ' ;
+// [52]
+ns_esc_double_quote : '"' ;
+// [53]
+ns_esc_slash : '/' ;
+// [54]
+ns_esc_backslash : '\\' ;
+// [55]
+ns_esc_next_line : 'N' ;
+// [56]
+ns_esc_non_breaking_space : '_' ;
+// [57]
+ns_esc_line_separator : 'L' ;
+// [58]
+ns_esc_paragraph_separator : 'P' ;
+
+double_hex : ns_hex_digit ns_hex_digit;
+quad_hex : double_hex double_hex;
+octo_hex : quad_hex quad_hex;
+
+// [59]
+ns_esc_8_bit : 'x' double_hex ;
+// [60]
+ns_esc_16_bit : 'u' quad_hex ;
+// [61]
+ns_esc_32_bit : 'U' octo_hex ;
+
+// [62]
+c_ns_esc_char : c_escape
+              ( ns_esc_null | ns_esc_bell | ns_esc_backspace
+              | ns_esc_horizontal_tab | ns_esc_line_feed
+              | ns_esc_vertical_tab | ns_esc_form_feed
+              | ns_esc_carriage_return | ns_esc_escape | ns_esc_space
+              | ns_esc_double_quote | ns_esc_slash | ns_esc_backslash
+              | ns_esc_next_line | ns_esc_non_breaking_space
+              | ns_esc_line_separator | ns_esc_paragraph_separator
+              | ns_esc_8_bit | ns_esc_16_bit | ns_esc_32_bit ) ;
 
 // -- Lexer Rules --------------------------------------------------------------
 
@@ -220,77 +386,18 @@ C_DOUBLE_QUOTE : '"' ;
 C_DIRECTIVE : '%' ;
 
 // [21]
-C_RESERVED_AT : '@' ;
-C_RESERVED_TICK : '`' ;
+C_RESERVED : '@' | '`' ;
 
 // [31]
 S_SPACE : ' ' ;
 // [32]
 S_TAB : '\t' ;
 
-// [35]
-fragment NS_DEC_DIGIT : [0-9] ;
-// [36]
-fragment NS_HEX_DIGIT : NS_DEC_DIGIT | [A-F] | [a-f] ;
 
-// [41]
-fragment C_ESCAPE : '\\' ;
-// [42]
-fragment NS_ESC_NULL : '0' ;
-// [43]
-fragment NS_ESC_BELL : 'a' ;
-// [44]
-fragment NS_ESC_BACKSPACE : 'b' ;
-// [45]
-fragment NS_ESC_HORIZONTAL_TAB : 't' | S_TAB ;
-// [46]
-fragment NS_ESC_LINE_FEED : 'n' ;
-// [47]
-fragment NS_ESC_VERTICAL_TAB : 'v' ;
-// [48]
-fragment NS_ESC_FORM_FEED : 'f' ;
-// [49]
-fragment NS_ESC_CARRIAGE_RETURN : 'r' ;
-// [50]
-fragment NS_ESC_ESCAPE : 'e' ;
-// [51]
-fragment NS_ESC_SPACE : ' ' ;
-// [52]
-fragment NS_ESC_DOUBLE_QUOTE : '"' ;
-// [53]
-fragment NS_ESC_SLASH : '/' ;
-// [54]
-fragment NS_ESC_BACKSLASH : '\\' ;
-// [55]
-fragment NS_ESC_NEXT_LINE : 'N' ;
-// [56]
-fragment NS_ESC_NON_BREAKING_SPACE : '_' ;
-// [57]
-fragment NS_ESC_LINE_SEPARATOR : 'L' ;
-// [58]
-fragment NS_ESC_PARAGRAPH_SEPARATOR : 'P' ;
+C_PRINTABLE_16_BIT : '\u0085'
+                   | [\u00A0-\uD7FF]
+                   | [\uE000-\uFFFD]
+                   | [\u{10000}-\u{10FFFF}]
+                   ;
 
-fragment DOUBLE_HEX : NS_HEX_DIGIT NS_HEX_DIGIT;
-fragment QUAD_HEX : DOUBLE_HEX DOUBLE_HEX;
-fragment OCTO_HEX : QUAD_HEX QUAD_HEX;
-
-// [59]
-fragment NS_ESC_8_BIT : 'x' DOUBLE_HEX ;
-// [60]
-fragment NS_ESC_16_BIT : 'u' QUAD_HEX ;
-// [61]
-fragment NS_ESC_32_BIT : 'U' OCTO_HEX ;
-
-// [62]
-C_NS_ESC_CHAR : C_ESCAPE
-              ( NS_ESC_NULL | NS_ESC_BELL | NS_ESC_BACKSPACE
-              | NS_ESC_HORIZONTAL_TAB | NS_ESC_LINE_FEED
-              | NS_ESC_VERTICAL_TAB | NS_ESC_FORM_FEED
-              | NS_ESC_CARRIAGE_RETURN | NS_ESC_ESCAPE | NS_ESC_SPACE
-              | NS_ESC_DOUBLE_QUOTE | NS_ESC_SLASH | NS_ESC_BACKSLASH
-              | NS_ESC_NEXT_LINE | NS_ESC_NON_BREAKING_SPACE
-              | NS_ESC_LINE_SEPARATOR | NS_ESC_PARAGRAPH_SEPARATOR
-              | NS_ESC_8_BIT | NS_ESC_16_BIT | NS_ESC_32_BIT ) ;
-
-HASH_TILL_BRACKET_OPEN : [\u0023-\u005B] ;
-BRACKET_CLOSED_TILL_END : [\u005D-\u{10FFFF}] ;
+NB_JSON : [\u0020-\u{10FFFF}] ;
