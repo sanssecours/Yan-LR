@@ -6,7 +6,7 @@ export CXX := /usr/local/opt/llvm/bin/clang++
 .PHONY: compile clean configure
 
 run: compile
-	@sed -E 's~([^=]+)=(.*)~s/<\2>/<\1>/~' Build/$(GRAMMAR).tokens > \
+	@sed -nE "s~(^[^'][^=]+)=(.*)~s/<\2>/<\1>/~p" Build/$(GRAMMAR).tokens > \
 	     Build/$(GRAMMAR).sed
 	@set -o pipefail; Build/badger | sed -f Build/$(GRAMMAR).sed
 
