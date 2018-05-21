@@ -16,8 +16,15 @@ tokens { INDENT, DEDENT }
 
 @lexer::postinclude
 {
-  using namespace std;
-  using namespace antlr4;
+  using std::deque;
+  using std::make_pair;
+  using std::regex;
+  using std::stack;
+  using std::string;
+  using std::unique_ptr;
+
+  using antlr4::CommonToken;
+  using antlr4::Token;
 }
 
 @lexer::members
