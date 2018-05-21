@@ -46,9 +46,10 @@ public:
         tokens.pop_back();
       }
 
-      if (tokens.back().getType() != YAMLParser::NEWLINE &&
+      // Add newline token after last node if it is missing
+      if (tokens.back().getType() != NEWLINE &&
           tokens.back().getType() != YAMLParser::DEDENT) {
-        emit(commonToken(YAMLParser::NEWLINE, "\n"));
+        emit(commonToken(NEWLINE, "\n"));
       }
 
       // Emit missing DEDENT tokens
