@@ -31,7 +31,7 @@ tokens { INDENT, DEDENT }
 {
 public:
   void emit(unique_ptr<Token> token) override {
-    tokens.push_back(dynamic_cast<CommonToken *>(&*token));
+    tokens.push_back(static_cast<CommonToken *>(&*token));
     Lexer::setToken(move(token));
   }
 
@@ -70,7 +70,7 @@ public:
 
 private:
   stack<int> indents{deque<int>{0}};
-  deque<CommonToken> tokens{dynamic_cast<CommonToken *>(&*indent(0))};
+  deque<CommonToken> tokens{static_cast<CommonToken *>(&*indent(0))};
   int lastLine = 0;
 
   unique_ptr<CommonToken> commonToken(size_t type, string text) {
