@@ -109,7 +109,7 @@ child : INDENT (scalar | sequence) DEDENT ;
 sequence : element+ ;
 element : C_SEQUENCE_ENTRY S_SPACE scalar
         | C_SEQUENCE_ENTRY S_SPACE? NEWLINE child ;
-scalar : (c_double_quoted | nb_double_one_line) NEWLINE ;
+scalar : (c_double_quoted | ns_plain_one_line) NEWLINE ;
 
 // [107]
 nb_double_char : c_ns_esc_char | nb_json_minus_backslash_double_quote ;
@@ -117,6 +117,30 @@ nb_double_char : c_ns_esc_char | nb_json_minus_backslash_double_quote ;
 c_double_quoted : '"' nb_double_one_line '"' ;
 // [111]
 nb_double_one_line : nb_double_char* ;
+
+// [126]
+ns_plain_first : ns_printable_7_bit_without_indicators ;
+
+// [127]
+ns_plain_safe : ns_plain_safe_in ;
+
+// [128]
+ns_plain_safe_in : ns_printable_7_bit_without_indicators
+                 | c_indicator_without_flow_quotes_value_comment
+                 | c_indicator_quotes
+                 ;
+
+// [130]
+ns_plain_char : ns_plain_safe ;
+
+// [131]
+ns_plain : ns_plain_one_line ;
+
+// [132]
+nb_ns_plain_in_line : ( s_white* ns_plain_char )* ;
+
+// [133]
+ns_plain_one_line : ns_plain_first nb_ns_plain_in_line ;
 
 nb_json_minus_backslash_double_quote : c_printable_7_bit_without_indicators
                                      | c_indicator_without_quotes
@@ -126,29 +150,41 @@ nb_json_minus_backslash_double_quote : c_printable_7_bit_without_indicators
                                      | NB_JSON
                                      ;
 
-c_indicator_without_quotes : C_SEQUENCE_ENTRY
-                           | C_MAPPING_KEY
-                           | C_MAPPING_VALUE
+c_indicator_without_flow_quotes_value_comment : C_SEQUENCE_ENTRY
+                                              | C_MAPPING_KEY
+                                              | C_ANCHOR
+                                              | C_ALIAS
+                                              | C_TAG
+                                              | C_LITERAL
+                                              | C_FOLDED
+                                              | C_DIRECTIVE
+                                              | C_RESERVED
+                                              ;
+
+c_indicator_without_flow_quotes : c_indicator_without_flow_quotes_value_comment
+                                | C_MAPPING_VALUE
+                                | C_COMMENT
+                                ;
+
+c_indicator_without_quotes : c_indicator_without_flow_quotes
                            | C_COLLECT_ENTRY
                            | C_SEQUENCE_START
                            | C_SEQUENCE_END
                            | C_MAPPING_START
                            | C_MAPPING_END
-                           | C_COMMENT
-                           | C_ANCHOR
-                           | C_ALIAS
-                           | C_TAG
-                           | C_LITERAL
-                           | C_FOLDED
-                           | C_DIRECTIVE
-                           | C_RESERVED
                            ;
+
+c_indicator_quotes : C_SINGLE_QUOTE
+                   | C_DOUBLE_QUOTE
+                   ;
 
 // [22]
 c_indicator : c_indicator_without_quotes
-            | C_SINGLE_QUOTE
-            | C_DOUBLE_QUOTE
+            | c_indicator_quotes
             ;
+
+// [33]
+s_white : S_SPACE | S_TAB ;
 
 // [35]
 ns_dec_digit : '0'
@@ -236,24 +272,27 @@ ns_ascii_letter : ns_letter_lower | ns_letter_upper ;
 // [38]
 ns_word_char : ns_dec_digit | ns_ascii_letter | '-' ;
 
-c_printable_7_bit_without_indicators : S_TAB
+ns_printable_7_bit_without_indicators : '$'
+                                      | '('
+                                      | ')'
+                                      | '+'
+                                      | '.'
+                                      | '/'
+                                      | ns_word_char
+                                      | ';'
+                                      | '<'
+                                      | '='
+                                      | '>'
+                                      | '\\'
+                                      | '^'
+                                      | '_'
+                                      | '|'
+                                      | '~'
+                                      ;
+
+c_printable_7_bit_without_indicators : ns_printable_7_bit_without_indicators
+                                     | S_TAB
                                      | S_SPACE
-                                     | '$'
-                                     | '('
-                                     | ')'
-                                     | '+'
-                                     | '.'
-                                     | '/'
-                                     | ns_word_char
-                                     | ';'
-                                     | '<'
-                                     | '='
-                                     | '>'
-                                     | '\\'
-                                     | '^'
-                                     | '_'
-                                     | '|'
-                                     | '~'
                                      ;
 
 // [41]
