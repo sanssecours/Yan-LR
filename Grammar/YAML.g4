@@ -107,9 +107,9 @@ private:
 yaml : child EOF ;
 child : INDENT (scalar | sequence) DEDENT ;
 sequence : element+ ;
-element : C_SEQUENCE_ENTRY S_SPACE scalar
+element : C_SEQUENCE_ENTRY S_SPACE scalar NEWLINE
         | C_SEQUENCE_ENTRY S_SPACE? NEWLINE child ;
-scalar : (c_double_quoted | ns_plain_one_line) NEWLINE ;
+scalar : c_double_quoted | ns_plain_one_line ;
 
 // [107]
 nb_double_char : c_ns_esc_char | nb_json_minus_backslash_double_quote ;
