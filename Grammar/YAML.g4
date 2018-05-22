@@ -278,7 +278,8 @@ ns_printable_7_bit_without_indicators : '$'
                                       | '+'
                                       | '.'
                                       | '/'
-                                      | ns_word_char
+                                      | ns_dec_digit
+                                      | ns_ascii_letter
                                       | ';'
                                       | '<'
                                       | '='
