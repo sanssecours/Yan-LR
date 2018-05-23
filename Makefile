@@ -17,12 +17,12 @@ test:
 
 clean:
 	@printf '✨ Clean\n'
-	rm -rf Build
+	@rm -rf Build
 
 configure:
-	mkdir -p Build
-	cd Build; cmake -G Ninja ..
+	@mkdir -p Build
+	@cd Build; cmake -G Ninja ..
 
 compile:
 	@printf '👷🏽‍♀️ Build\n\n'
-	ninja -C Build
+	@ninja -C Build
