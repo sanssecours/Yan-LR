@@ -8,7 +8,7 @@ export CXX := /usr/local/opt/llvm/bin/clang++
 run: compile
 	@sed -nE "s~(^[^'][^=]+)=(.*)~s/<\2>/<\1>/~p" Build/$(GRAMMAR).tokens > \
 	     Build/$(GRAMMAR).sed
-	@set -o pipefail; Build/badger | sed -f Build/$(GRAMMAR).sed
+	@set -o pipefail; Build/badger Test.yaml | sed -f Build/$(GRAMMAR).sed
 
 clean:
 	rm -rf Build

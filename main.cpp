@@ -3,8 +3,10 @@
 #include "YAMLLexer.h"
 #include "YAMLParser.h"
 #include <antlr4-runtime.h>
+#include <exception>
 #include <fstream>
 #include <iostream>
+#include <stdlib.h>
 
 using namespace parser;
 using namespace antlr4;
@@ -25,8 +27,19 @@ class IdListener : public parser::YAMLBaseListener {
   }
 };
 
-int main() {
-  ifstream file{"Test.yaml"};
+int main(int argc, char const *argv[]) {
+
+  if (argc < 2) {
+    cerr << "Usage: " << argv[0] << " filename" << endl;
+    return EXIT_FAILURE;
+  }
+
+  ifstream file{argv[1]};
+  if (!file.is_open()) {
+    cerr << "Unable to open file “" << argv[1] << "”" << endl;
+    return EXIT_FAILURE;
+  }
+
   stringstream text;
   text << file.rdbuf();
   cout << "——————————" << endl << text.str() << "——————————" << endl;
@@ -52,5 +65,5 @@ int main() {
   cout << tree->toStringTree() << endl;
   cout << "——————————" << endl;
   walker.walk(&listener, tree);
-  return 0;
+  return EXIT_SUCCESS;
 }
