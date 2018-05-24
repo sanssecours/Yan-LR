@@ -46,10 +46,9 @@ public:
         tokens.pop_back();
       }
 
-      // Emit missing DEDENT and NEWLINE tokens
+      // Emit missing DEDENT tokens
       while (!indents.empty()) {
         indents.pop();
-        emit(commonToken(NEWLINE, "\n"));
         emit(dedent(lastLine + 1));
       }
 
@@ -100,7 +99,7 @@ private:
 // -- Parser Rules -------------------------------------------------------------
 
 yaml : child EOF ;
-child : INDENT (scalar | sequence | map) NEWLINE DEDENT ;
+child : INDENT (scalar | sequence | map) NEWLINE* DEDENT ;
 
 sequence : element (NEWLINE element)*  ;
 element : C_SEQUENCE_ENTRY S_SPACE (scalar | map)
