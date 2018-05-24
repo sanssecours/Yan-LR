@@ -3,6 +3,7 @@
 set parser "Build/badger"
 
 for file in (find Input -type file -name '*.yaml')
+    printf "• Test file “%s”\n" "$file"
     set error_message (eval $parser "$file" 2>&1 >/dev/null)
     if test "$status" -ne 0
         printf "Unable to parse “%s”:\n\n" "$file" >&2
