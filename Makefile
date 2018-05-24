@@ -5,13 +5,13 @@ export CXX := /usr/local/opt/llvm/bin/clang++
 
 .PHONY: compile clean configure test
 
-run: compile test
+run: test
 	@printf '\n🏃🏼‍♂️ Run\n\n'
 	@sed -nE "s~(^[^'][^=]+)=(.*)~s/<\2>/<\1>/~p" Build/$(GRAMMAR).tokens > \
 	     Build/$(GRAMMAR).sed
 	@set -o pipefail; Build/badger Input/Test.yaml | sed -f Build/$(GRAMMAR).sed
 
-test:
+test: compile
 	@printf '\n🐛 Test\n\n'
 	@./test.fish
 
