@@ -52,7 +52,7 @@ public:
         emit(dedent(lastLine + 1));
       }
 
-      emit(commonToken(EOF, "EOF", getCharIndex(), getCharIndex()));
+      emit(commonToken(EOF, getCharIndex(), getCharIndex()));
     }
 
     unique_ptr<Token> next(new CommonToken(tokens.front()));
@@ -71,11 +71,10 @@ private:
   unique_ptr<CommonToken> commonToken(size_t type, string text) {
     size_t stop = getCharIndex() - 1;
     size_t start = text.length() <= 0 ? stop : stop - text.length() + 1;
-    return commonToken(type, text, start, stop);
+    return commonToken(type, start, stop);
   }
 
-  unique_ptr<CommonToken> commonToken(size_t type, string text, size_t start,
-                                      size_t stop) {
+  unique_ptr<CommonToken> commonToken(size_t type, size_t start, size_t stop) {
     unique_ptr<CommonToken> token(new CommonToken(
         make_pair(this, _input), type, DEFAULT_TOKEN_CHANNEL, start, stop));
     return token;
@@ -360,18 +359,16 @@ c_ns_esc_char : c_escape
 
 NEWLINE : ( '\r'? '\n' ) S_SPACE* {
   {
-    string newLine = regex_replace(getText(), regex("[^\r\n]"), "");
     string spaces = regex_replace(getText(), regex("[\r\n]"), "");
     size_t last = getCharIndex() - 1;
-    emit(commonToken(NEWLINE, newLine, last - getText().length() + 1,
+    emit(commonToken(NEWLINE, last - getText().length() + 1,
                      last - spaces.length()));
     size_t indentation = spaces.length();
 
     size_t previous = indents.empty() ? 0 : indents.top();
     if (indentation > previous) {
       indents.push(indentation);
-      emit(commonToken(YAMLParser::INDENT, spaces, last - spaces.length() + 1,
-                       last));
+      emit(commonToken(YAMLParser::INDENT, last - spaces.length() + 1, last));
     } else if (indentation < previous) {
       while (!indents.empty() && indents.top() > indentation) {
         indents.pop();
