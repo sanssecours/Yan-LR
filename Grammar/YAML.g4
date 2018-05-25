@@ -60,7 +60,7 @@ public:
     if (next->getChannel() == Token::DEFAULT_CHANNEL) {
       lastLine = next->getLine();
     }
-    return move(next);
+    return next;
   }
 
 private:
@@ -71,28 +71,28 @@ private:
   unique_ptr<CommonToken> commonToken(size_t type, string text) {
     size_t stop = getCharIndex() - 1;
     size_t start = text.length() <= 0 ? stop : stop - text.length() + 1;
-    return move(commonToken(type, text, start, stop));
+    return commonToken(type, text, start, stop);
   }
 
   unique_ptr<CommonToken> commonToken(size_t type, string text, size_t start,
                                       size_t stop) {
     unique_ptr<CommonToken> token(new CommonToken(
         make_pair(this, _input), type, DEFAULT_TOKEN_CHANNEL, start, stop));
-    return move(token);
+    return token;
   }
 
   unique_ptr<CommonToken> dedent(size_t lineNumber) {
     unique_ptr<CommonToken> token{new CommonToken{YAMLParser::DEDENT}};
     token->setLine(lineNumber);
     token->setCharPositionInLine(0);
-    return move(token);
+    return token;
   }
 
   unique_ptr<CommonToken> indent(size_t lineNumber) {
     unique_ptr<CommonToken> token{new CommonToken{YAMLParser::INDENT}};
     token->setLine(lineNumber);
     token->setCharPositionInLine(0);
-    return move(token);
+    return token;
   }
 }
 
