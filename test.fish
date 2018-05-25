@@ -3,7 +3,7 @@
 set parser "Build/badger"
 
 set IFS (printf '\n\b')
-for file in (find Input -type file -name '*.yaml')
+for file in (find Input -depth 1 -type file -name '*.yaml')
     printf "• Test file “%s”\n" "$file"
     set error_message (eval $parser "\"$file\"" 2>&1 >/dev/null)
     if test "$status" -ne 0
