@@ -104,8 +104,9 @@ sequence : element (NEWLINE element)*  ;
 element : C_SEQUENCE_ENTRY S_SPACE (scalar | map)
         | C_SEQUENCE_ENTRY S_SPACE? NEWLINE child ;
 
-map : mapping (NEWLINE mapping)* ;
-mapping : key s_white* C_MAPPING_VALUE S_SPACE value ;
+map : mapping (NEWLINE* mapping)* ;
+mapping : key s_white* C_MAPPING_VALUE S_SPACE value
+        | key C_MAPPING_VALUE S_SPACE? NEWLINE child;
 key : scalar ;
 value : scalar ;
 
