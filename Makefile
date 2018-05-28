@@ -1,4 +1,6 @@
 GRAMMAR := YAML
+PARSER := Build/badger
+
 export ASAN_OPTIONS := detect_leaks=1,detect_container_overflow=0
 export CC := /usr/local/opt/llvm/bin/clang
 export CXX := /usr/local/opt/llvm/bin/clang++
@@ -9,7 +11,7 @@ run: test
 	@printf '\n🏃🏼‍♂️ Run\n\n'
 	@sed -nE "s~(^[^'][^=]+)=(.*)~s/<\2>/<\1>/~p" Build/$(GRAMMAR).tokens > \
 	     Build/$(GRAMMAR).sed
-	@set -o pipefail; Build/badger Input/Test.yaml | sed -f Build/$(GRAMMAR).sed
+	@set -o pipefail; $(PARSER) Input/Test.yaml | sed -f Build/$(GRAMMAR).sed
 
 test: compile
 	@printf '\n🐛 Test\n\n'
