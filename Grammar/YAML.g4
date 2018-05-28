@@ -98,7 +98,8 @@ private:
 // -- Parser Rules -------------------------------------------------------------
 
 yaml : child EOF ;
-child : INDENT (scalar | sequence | map) NEWLINE* DEDENT ;
+child : INDENT (sequence | map) NEWLINE* DEDENT
+      | INDENT value NEWLINE* DEDENT;
 
 sequence : element (NEWLINE element)*  ;
 element : C_SEQUENCE_ENTRY S_SPACE (scalar | map)

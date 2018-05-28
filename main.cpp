@@ -6,6 +6,7 @@
 #include <exception>
 #include <fstream>
 #include <iostream>
+#include <numeric>
 #include <stdlib.h>
 
 using namespace parser;
@@ -13,17 +14,25 @@ using namespace antlr4;
 using namespace std;
 
 class IdListener : public parser::YAMLBaseListener {
-  virtual void exitScalar(YAMLParser::ScalarContext *context) override {
-    cout << "Matched scalar “" << context->getText() << "”" << endl;
+  deque<string> path;
+
+  virtual void exitValue(YAMLParser::ValueContext *context) override {
+    string output = accumulate(path.begin() + 1, path.end(), path[0],
+                               [](const string &accumulator, string value) {
+                                 return accumulator + "/" + value;
+                               });
+
+    cout << output << ": " << context->getText() << endl;
   }
-  virtual void
-  exitC_double_quoted(YAMLParser::C_double_quotedContext *context) override {
-    cout << "Matched double quoted scalar “"
-         << context->nb_double_one_line()->getText() << "”" << endl;
+
+  virtual void enterMapping(YAMLParser::MappingContext *context) override {
+    string key = context->key()->getText();
+    path.push_back(key);
   }
-  virtual void exitNs_plain_one_line(
-      YAMLParser::Ns_plain_one_lineContext *context) override {
-    cout << "Matched plain scalar “" << context->getText() << "”" << endl;
+
+  virtual void exitMapping(YAMLParser::MappingContext *context
+                           __attribute__((unused))) override {
+    path.pop_back();
   }
 };
 
