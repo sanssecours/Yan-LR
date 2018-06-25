@@ -17,7 +17,7 @@ class IdListener : public parser::YAMLBaseListener {
   deque<string> path;
 
   virtual void exitValue(YAMLParser::ValueContext *context) override {
-    string output = accumulate(path.begin() + 1, path.end(), path[0],
+    string output = accumulate(path.begin(), path.end(), (string const) "",
                                [](const string &accumulator, string value) {
                                  return accumulator + "/" + value;
                                });
