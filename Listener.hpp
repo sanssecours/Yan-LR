@@ -17,6 +17,19 @@ using ValueContext = antlr::YAMLParser::ValueContext;
 using CppKey = kdb::Key;
 using CppKeySet = kdb::KeySet;
 
+// -- Functions ----------------------------------------------------------------
+
+string numberToArrayBaseName(uintmax_t const number) {
+  size_t digits = 1;
+  string output = "#";
+
+  for (uintmax_t value = number; value > 9; digits++) {
+    value /= 10;
+  }
+
+  return "#" + string(digits - 1, '_') + to_string(number);
+}
+
 // -- Class --------------------------------------------------------------------
 
 /**
@@ -29,6 +42,7 @@ class KeyListener : public YAMLBaseListener {
   /** This stack stores a key for each level of the current key name below
    * parent. */
   stack<CppKey> parents;
+  stack<uintmax_t> indices;
 
 public:
   /**
@@ -71,6 +85,8 @@ public:
    */
   virtual void exitMapping(MappingContext *context
                            __attribute__((unused))) override {
+    cerr << "(exitMapping) Remove top element “" << parents.top().getName()
+         << "” with value “" << parents.top().getString() << "”" << endl;
     // Returning from a mapping such as `part: …` means that we need need to
     // remove the key for `part` from the stack.
     parents.pop();
@@ -83,6 +99,9 @@ public:
    */
   virtual void enterSequence(SequenceContext *context
                              __attribute__((unused))) override {
+    cerr << "(enterSequence) Top element: “" << parents.top().getName() << "”"
+         << endl;
+    indices.push(0);
     parents.top().setMeta("array", ""); // We start with an empty array
   }
 
@@ -95,6 +114,7 @@ public:
                             __attribute__((unused))) override {
     // We add the parent key of all array elements after we leave the sequence
     keys.append(parents.top());
+    indices.pop();
   }
 
   /**
@@ -105,16 +125,20 @@ public:
    */
   virtual void enterElement(ElementContext *context
                             __attribute__((unused))) override {
-    CppKeySet arrayEntries{elektraArrayGet(*parents.top(), keys.getKeySet())};
 
-    if (arrayEntries.size() <= 0) {
-      CppKey first{parents.top().getName(), KEY_END};
-      first.addBaseName("#");
-      arrayEntries.append(first);
+    CppKey key{parents.top().getName(), KEY_END};
+    key.addBaseName(numberToArrayBaseName(indices.top()));
+
+    uintmax_t index = indices.top();
+    indices.pop();
+    if (index < UINTMAX_MAX) {
+      index++;
     }
+    indices.push(index);
 
-    CppKey key{elektraArrayGetNextKey(arrayEntries.getKeySet())};
     parents.top().setMeta("array", key.getBaseName());
+    cerr << "(enterElement) Add new key: “" << key.getName() << "”" << endl;
+
     parents.push(key);
   }
 
