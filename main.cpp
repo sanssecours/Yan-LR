@@ -1,40 +1,20 @@
-#include "ErrorListener.hpp"
-#include "YAMLBaseListener.h"
+#include <fstream>
+
 #include "YAMLLexer.h"
 #include "YAMLParser.h"
 #include <antlr4-runtime.h>
-#include <exception>
-#include <fstream>
-#include <iostream>
-#include <numeric>
-#include <stdlib.h>
 
-using namespace parser;
+#include <kdb.hpp>
+
+#include "ErrorListener.hpp"
+#include "Listener.hpp"
+
+using namespace antlr;
 using namespace antlr4;
+using namespace ckdb;
 using namespace std;
 
-class IdListener : public parser::YAMLBaseListener {
-  deque<string> path;
-
-  virtual void exitValue(YAMLParser::ValueContext *context) override {
-    string output = accumulate(path.begin(), path.end(), (string const) "",
-                               [](const string &accumulator, string value) {
-                                 return accumulator + "/" + value;
-                               });
-
-    cout << output << ": " << context->getText() << endl;
-  }
-
-  virtual void enterMapping(YAMLParser::MappingContext *context) override {
-    string key = context->key()->getText();
-    path.push_back(key);
-  }
-
-  virtual void exitMapping(YAMLParser::MappingContext *context
-                           __attribute__((unused))) override {
-    path.pop_back();
-  }
-};
+using CppKey = kdb::Key;
 
 int main(int argc, char const *argv[]) {
 
@@ -67,12 +47,15 @@ int main(int argc, char const *argv[]) {
   parser.addErrorListener(&errorListener);
 
   tree::ParseTreeWalker walker{};
-  IdListener listener{};
+  KeyListener listener{keyNew("user", KEY_END, "", KEY_VALUE)};
 
   antlr4::tree::ParseTree *tree = parser.yaml();
   cout << "——————————" << endl;
   cout << tree->toStringTree() << endl;
   cout << "——————————" << endl;
   walker.walk(&listener, tree);
+  for (auto key : listener.keySet()) {
+    cout << key.getName() << ": " << key.getString() << endl;
+  }
   return EXIT_SUCCESS;
 }

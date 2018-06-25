@@ -42,14 +42,18 @@ set_source_files_properties (${GRAMMAR_NAME}Lexer.cpp
                              COMPILE_OPTIONS
                              "-Wno-unused-parameter")
 
-set (SOURCE_FILES "${GENERATED_SOURCE_FILES}" main.cpp ErrorListener.hpp)
+set (SOURCE_FILES
+     "${GENERATED_SOURCE_FILES}"
+     main.cpp
+     ErrorListener.hpp
+     Listener.hpp)
 
 add_custom_command (OUTPUT ${GENERATED_SOURCE_FILES}
                     COMMAND antlr4 -Werror -Dlanguage=Cpp -o
-                            ${CMAKE_CURRENT_BINARY_DIR} -package parser
+                            ${CMAKE_CURRENT_BINARY_DIR} -package antlr
                             ${GRAMMAR_FILE}
                     DEPENDS ${GRAMMAR_FILE})
 
 include_directories ("${ANTLR4CPP_INCLUDE_DIRS}" "${CMAKE_CURRENT_BINARY_DIR}")
 add_executable (badger ${SOURCE_FILES})
-target_link_libraries (badger ${ANTLR4CPP_LIBRARIES})
+target_link_libraries (badger ${ANTLR4CPP_LIBRARIES} elektra elektra-ease)
