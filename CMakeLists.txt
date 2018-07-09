@@ -11,7 +11,8 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=integer")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer")
 
 execute_process (COMMAND antlr4
-                 RESULT_VARIABLE ANTLR_NOT_AVAILABLE OUTPUT_QUIET)
+                 RESULT_VARIABLE ANTLR_NOT_AVAILABLE
+                 OUTPUT_QUIET)
 if (ANTLR_NOT_AVAILABLE)
   message (FATAL_ERROR "ANTLR 4 executable (antlr4) not found")
 endif (ANTLR_NOT_AVAILABLE)
