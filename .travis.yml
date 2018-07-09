@@ -16,4 +16,4 @@ before_install:
     fi
 
 script:
-  - make configure test
+  - make configure run
