@@ -7,7 +7,7 @@ export CXX := /usr/local/opt/llvm/bin/clang++
 
 .PHONY: compile clean configure test
 
-run: test
+run: compile
 	@printf '\n🏃🏼‍♂️ Run\n\n'
 	@sed -nE "s~(^[^'][^=]+)=(.*)~s/<\2>/<\1>/~p" Build/$(GRAMMAR).tokens > \
 	     Build/$(GRAMMAR).sed

@@ -1,13 +1,13 @@
 #include <fstream>
 
-#include "YAMLLexer.h"
-#include "YAMLParser.h"
+#include "YAML.h"
 #include <antlr4-runtime.h>
 
 #include <kdb.hpp>
 
 #include "ErrorListener.hpp"
 #include "Listener.hpp"
+#include "YAMLLexer.hpp"
 
 using namespace antlr;
 using namespace antlr4;
@@ -41,7 +41,7 @@ int main(int argc, char const *argv[]) {
     cout << token->toString() << endl;
   }
 
-  YAMLParser parser(&tokens);
+  YAML parser(&tokens);
   ErrorListener errorListener{};
   parser.removeErrorListeners();
   parser.addErrorListener(&errorListener);

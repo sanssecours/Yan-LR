@@ -32,13 +32,13 @@ endif (ELEKTRA_FOUND)
 
 set (GRAMMAR_NAME YAML)
 set (GRAMMAR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Grammar/${GRAMMAR_NAME}.g4)
-set (GENERATED_SOURCE_FILES_NAMES Lexer Parser BaseListener Listener)
-foreach (file ${GENERATED_SOURCE_FILES_NAMES})
+set (GENERATED_SOURCE_FILES_NAMES BaseListener Listener)
+foreach (file ${GENERATED_SOURCE_FILES_NAMES} "")
   set (filepath ${CMAKE_CURRENT_BINARY_DIR}/${GRAMMAR_NAME}${file}.cpp)
   set_source_files_properties (${filepath} PROPERTIES GENERATED TRUE)
   list (APPEND GENERATED_SOURCE_FILES ${filepath})
 endforeach (file ${GENERATED_SOURCE_FILES_NAMES})
-set_source_files_properties (${GRAMMAR_NAME}Lexer.cpp
+set_source_files_properties (${GRAMMAR_NAME}Lexer.hpp
                              PROPERTIES
                              COMPILE_OPTIONS
                              "-Wno-unused-parameter")
@@ -47,13 +47,15 @@ set (SOURCE_FILES
      "${GENERATED_SOURCE_FILES}"
      main.cpp
      ErrorListener.hpp
-     Listener.hpp)
+     Listener.hpp
+     YAMLLexer.hpp)
 
 add_custom_command (OUTPUT ${GENERATED_SOURCE_FILES}
                     COMMAND antlr4 -Werror -Dlanguage=Cpp -o
                             ${CMAKE_CURRENT_BINARY_DIR} -package antlr
                             ${GRAMMAR_FILE}
-                    DEPENDS ${GRAMMAR_FILE})
+                    DEPENDS ${GRAMMAR_FILE}
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/Grammar)
 
 include_directories ("${ANTLR4CPP_INCLUDE_DIRS}" "${CMAKE_CURRENT_BINARY_DIR}")
 add_executable (badger ${SOURCE_FILES})
