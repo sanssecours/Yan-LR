@@ -4,14 +4,21 @@ using antlr4::Token;
 
 class YAMLLexer : public TokenSource {
 public:
-  static const size_t STREAM_BEGIN = 1;
+  static const size_t STREAM_START = 1;
   static const size_t STREAM_END = 2;
 
-  YAMLLexer(CharStream *input) { this->input = input; }
+  YAMLLexer(CharStream *input) {
+    this->input = input;
+    scanStart();
+  }
 
-  std::unique_ptr<Token> nextToken() override {
-    return factory->create(make_pair(this, input), Token::EOF, "",
-                           Token::DEFAULT_CHANNEL, 0, 0, 0, 0);
+  unique_ptr<Token> nextToken() override {
+    if (!tokens.empty()) {
+      unique_ptr<CommonToken> token = move(tokens.back());
+      tokens.pop_back();
+      return token;
+    }
+    return commonToken(Token::EOF, 0, 0, "EOF");
   }
 
   size_t getLine() const override { return 0; }
@@ -30,5 +37,23 @@ public:
 
 private:
   CharStream *input;
+  deque<unique_ptr<CommonToken>> tokens;
   Ref<TokenFactory<CommonToken>> factory = CommonTokenFactory::DEFAULT;
+
+  unique_ptr<CommonToken> commonToken(size_t type, size_t start, size_t stop) {
+    return unique_ptr<CommonToken>{new CommonToken{
+        make_pair(this, input), type, Token::DEFAULT_CHANNEL, start, stop}};
+  }
+
+  unique_ptr<CommonToken> commonToken(size_t type, size_t start, size_t stop,
+                                      string text) {
+    auto token = commonToken(type, start, stop);
+    token->setText(text);
+    return token;
+  }
+
+  void scanStart() {
+    auto start = commonToken(STREAM_START, 0, 0, "START");
+    tokens.push_back(move(start));
+  }
 };

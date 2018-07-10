@@ -16,4 +16,4 @@ options {
   tokenVocab=YAML;
 }
 
-yaml : EOF ;
+yaml : STREAM_START EOF ;
