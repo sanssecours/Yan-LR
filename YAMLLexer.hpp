@@ -16,8 +16,8 @@ public:
     if (tokens.empty()) {
       fetchTokens();
     }
-    unique_ptr<CommonToken> token = move(tokens.back());
-    tokens.pop_back();
+    unique_ptr<CommonToken> token = move(tokens.front());
+    tokens.pop_front();
     return token;
   }
 
