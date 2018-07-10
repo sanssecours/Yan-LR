@@ -23,7 +23,7 @@ public:
 
   size_t getLine() const override { return line; }
 
-  size_t getCharPositionInLine() override { return 0; }
+  size_t getCharPositionInLine() override { return column; }
 
   CharStream *getInputStream() override { return input; }
 
@@ -40,6 +40,7 @@ private:
   deque<unique_ptr<CommonToken>> tokens;
   Ref<TokenFactory<CommonToken>> factory = CommonTokenFactory::DEFAULT;
   size_t line = 0;
+  size_t column = 0;
 
   unique_ptr<CommonToken> commonToken(size_t type, size_t start, size_t stop) {
     return unique_ptr<CommonToken>{new CommonToken{
@@ -55,8 +56,10 @@ private:
 
   void fetchTokens() {
     while (input->LA(1) != Token::EOF) {
+      column++;
       if (input->LA(1) == '\n') {
         line++;
+        column = 0;
       }
       input->consume();
     }
