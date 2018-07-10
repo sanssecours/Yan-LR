@@ -45,10 +45,10 @@ set_source_files_properties (${GRAMMAR_NAME}Lexer.hpp
 
 set (SOURCE_FILES
      "${GENERATED_SOURCE_FILES}"
-     main.cpp
-     ErrorListener.hpp
-     Listener.hpp
-     YAMLLexer.hpp)
+     Source/main.cpp
+     Source/ErrorListener.hpp
+     Source/Listener.hpp
+     Source/YAMLLexer.hpp)
 
 add_custom_command (OUTPUT ${GENERATED_SOURCE_FILES}
                     COMMAND antlr4 -Werror -Dlanguage=Cpp -o
