@@ -63,13 +63,19 @@ private:
       }
       input->consume();
     }
-    auto eof = commonToken(Token::EOF, input->index(), input->index(), "EOF");
-    tokens.push_back(move(eof));
+    scanEnd();
   }
 
   void scanStart() {
     auto start =
         commonToken(STREAM_START, input->index(), input->index(), "START");
     tokens.push_back(move(start));
+  }
+
+  void scanEnd() {
+    tokens.push_back(
+        commonToken(STREAM_END, input->index(), input->index(), "END"));
+    tokens.push_back(
+        commonToken(Token::EOF, input->index(), input->index(), "EOF"));
   }
 };
