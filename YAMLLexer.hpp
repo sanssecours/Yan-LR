@@ -39,7 +39,7 @@ private:
   CharStream *input;
   deque<unique_ptr<CommonToken>> tokens;
   Ref<TokenFactory<CommonToken>> factory = CommonTokenFactory::DEFAULT;
-  size_t line = 0;
+  size_t line = 1;
   size_t column = 0;
 
   unique_ptr<CommonToken> commonToken(size_t type, size_t start, size_t stop) {
