@@ -13,12 +13,12 @@ public:
   }
 
   unique_ptr<Token> nextToken() override {
-    if (!tokens.empty()) {
-      unique_ptr<CommonToken> token = move(tokens.back());
-      tokens.pop_back();
-      return token;
+    if (tokens.empty()) {
+      fetchTokens();
     }
-    return commonToken(Token::EOF, 0, 0, "EOF");
+    unique_ptr<CommonToken> token = move(tokens.back());
+    tokens.pop_back();
+    return token;
   }
 
   size_t getLine() const override { return 0; }
@@ -50,6 +50,13 @@ private:
     auto token = commonToken(type, start, stop);
     token->setText(text);
     return token;
+  }
+
+  void fetchTokens() {
+    if (input->LA(1) != Token::EOF) {
+      input->consume();
+    }
+    tokens.push_back(commonToken(Token::EOF, 0, 0, "EOF"));
   }
 
   void scanStart() {
