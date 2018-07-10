@@ -68,7 +68,8 @@ private:
   }
 
   void scanStart() {
-    auto start = commonToken(STREAM_START, 0, 0, "START");
+    auto start =
+        commonToken(STREAM_START, input->index(), input->index(), "START");
     tokens.push_back(move(start));
   }
 };
