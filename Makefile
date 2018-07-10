@@ -15,7 +15,7 @@ run: test
 
 test: compile
 	@printf '\n🐛 Test\n\n'
-	@./test.fish
+	@Test/test.fish
 
 clean:
 	@printf '✨ Clean\n'
