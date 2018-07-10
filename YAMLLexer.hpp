@@ -53,7 +53,7 @@ private:
   }
 
   void fetchTokens() {
-    if (input->LA(1) != Token::EOF) {
+    while (input->LA(1) != Token::EOF) {
       input->consume();
     }
     tokens.push_back(commonToken(Token::EOF, 0, 0, "EOF"));
