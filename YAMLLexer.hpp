@@ -56,7 +56,8 @@ private:
     while (input->LA(1) != Token::EOF) {
       input->consume();
     }
-    tokens.push_back(commonToken(Token::EOF, 0, 0, "EOF"));
+    auto eof = commonToken(Token::EOF, input->index(), input->index(), "EOF");
+    tokens.push_back(move(eof));
   }
 
   void scanStart() {
