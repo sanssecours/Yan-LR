@@ -7,11 +7,11 @@ export CXX := /usr/local/opt/llvm/bin/clang++
 
 .PHONY: compile clean configure test
 
-run: compile
+run: test
 	@printf '\n🏃🏼‍♂️ Run\n\n'
 	@sed -nE "s~(^[^'][^=]+)=(.*)~s/<\2>/<\1>/~p" Build/$(GRAMMAR).tokens > \
 	     Build/$(GRAMMAR).sed
-	@set -o pipefail; $(PARSER) Input/Test.yaml | sed -f Build/$(GRAMMAR).sed
+	@set -o pipefail; $(PARSER) Input/Empty.yaml | sed -f Build/$(GRAMMAR).sed
 
 test: compile
 	@printf '\n🐛 Test\n\n'
