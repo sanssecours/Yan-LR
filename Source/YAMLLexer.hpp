@@ -17,13 +17,12 @@
 
 #include <antlr4-runtime.h>
 
-using antlr4::TokenSource;
-
 using antlr4::CharStream;
 using antlr4::CommonToken;
 using antlr4::CommonTokenFactory;
 using antlr4::Token;
 using antlr4::TokenFactory;
+using antlr4::TokenSource;
 
 using std::deque;
 using std::pair;
