@@ -22,6 +22,7 @@ public:
 
   YAMLLexer(CharStream *input) {
     this->input = input;
+    this->source = make_pair(this, input);
     scanStart();
   }
 
@@ -52,19 +53,19 @@ private:
   CharStream *input;
   deque<unique_ptr<CommonToken>> tokens;
   Ref<TokenFactory<CommonToken>> factory = CommonTokenFactory::DEFAULT;
+  pair<TokenSource *, CharStream *> source;
   size_t line = 1;
   size_t column = 0;
 
   unique_ptr<CommonToken> commonToken(size_t type, size_t start, size_t stop) {
-    return unique_ptr<CommonToken>{new CommonToken{
-        make_pair(this, input), type, Token::DEFAULT_CHANNEL, start, stop}};
+    return factory->create(source, type, "", Token::DEFAULT_CHANNEL, start,
+                           stop, line, column);
   }
 
   unique_ptr<CommonToken> commonToken(size_t type, size_t start, size_t stop,
                                       string text) {
-    auto token = commonToken(type, start, stop);
-    token->setText(text);
-    return token;
+    return factory->create(source, type, text, Token::DEFAULT_CHANNEL, start,
+                           stop, line, column);
   }
 
   void fetchTokens() {
