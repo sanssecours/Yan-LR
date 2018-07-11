@@ -1,9 +1,13 @@
+// -- Imports ------------------------------------------------------------------
+
 #include <iostream>
 
 #include "ErrorListener.hpp"
 
 using std::cerr;
 using std::endl;
+
+// -- Class --------------------------------------------------------------------
 
 void ErrorListener::syntaxError(Recognizer *recognizer __attribute__((unused)),
                                 Token *offendingSymbol __attribute__((unused)),

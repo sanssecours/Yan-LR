@@ -1,3 +1,5 @@
+// -- Imports ------------------------------------------------------------------
+
 #include <antlr4-runtime.h>
 
 using antlr4::BaseErrorListener;
@@ -6,6 +8,8 @@ using antlr4::Token;
 
 using std::exception_ptr;
 using std::string;
+
+// -- Class --------------------------------------------------------------------
 
 class ErrorListener : public BaseErrorListener {
   void syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line,
