@@ -14,19 +14,6 @@ using ValueContext = antlr::YAML::ValueContext;
 using CppKey = kdb::Key;
 using CppKeySet = kdb::KeySet;
 
-// -- Functions ----------------------------------------------------------------
-
-string numberToArrayBaseName(uintmax_t const number) {
-  size_t digits = 1;
-  string output = "#";
-
-  for (uintmax_t value = number; value > 9; digits++) {
-    value /= 10;
-  }
-
-  return "#" + string(digits - 1, '_') + to_string(number);
-}
-
 // -- Class --------------------------------------------------------------------
 
 /**
@@ -39,7 +26,6 @@ class KeyListener : public YAMLBaseListener {
   /** This stack stores a key for each level of the current key name below
    * parent. */
   stack<CppKey> parents;
-  stack<uintmax_t> indices;
 
 public:
   KeyListener(CppKey parent);
