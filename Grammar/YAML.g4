@@ -4,4 +4,7 @@ options {
   tokenVocab=YAML;
 }
 
-yaml : STREAM_START STREAM_END EOF ;
+yaml : STREAM_START child? STREAM_END EOF ;
+child : value ;
+
+value : PLAIN_SCALAR ;
