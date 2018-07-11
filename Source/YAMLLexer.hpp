@@ -19,6 +19,7 @@ class YAMLLexer : public TokenSource {
 public:
   static const size_t STREAM_START = 1;
   static const size_t STREAM_END = 2;
+  static const size_t PLAIN_SCALAR = 3;
 
   YAMLLexer(CharStream *input) {
     this->input = input;
@@ -69,15 +70,20 @@ private:
   }
 
   void fetchTokens() {
-    while (input->LA(1) != Token::EOF) {
-      column++;
-      if (input->LA(1) == '\n') {
-        line++;
-        column = 0;
+    if (input->LA(1) == ' ' || input->LA(1) == '\n') {
+      while (input->LA(1) != Token::EOF) {
+        column++;
+        if (input->LA(1) == '\n') {
+          line++;
+          column = 0;
+        }
+        input->consume();
       }
-      input->consume();
+      scanEnd();
+      return;
     }
-    scanEnd();
+
+    scanPlainScalar();
   }
 
   void scanStart() {
@@ -91,5 +97,15 @@ private:
         commonToken(STREAM_END, input->index(), input->index(), "END"));
     tokens.push_back(
         commonToken(Token::EOF, input->index(), input->index(), "EOF"));
+  }
+
+  void scanPlainScalar() {
+    size_t start = input->index();
+
+    while (input->LA(1) != ' ' && input->LA(1) != '\n' &&
+           input->LA(1) != Token::EOF) {
+      input->consume();
+    }
+    tokens.push_back(commonToken(PLAIN_SCALAR, start, input->index() - 1));
   }
 };
