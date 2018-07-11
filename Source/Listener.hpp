@@ -9,6 +9,7 @@
 #include "YAMLBaseListener.h"
 
 using antlr::YAMLBaseListener;
+using ValueContext = antlr::YAML::ValueContext;
 
 using CppKey = kdb::Key;
 using CppKeySet = kdb::KeySet;
@@ -49,6 +50,17 @@ public:
    * object.
    */
   KeyListener(CppKey parent) : keys{} { parents.push(parent); }
+
+  /**
+   * @brief This function will be called after the parser exits a scalar value.
+   *
+   * @param context The context specifies data matched by the rule.
+   */
+  virtual void exitValue(ValueContext *context) override {
+    CppKey key = parents.top();
+    key.setString(context->getText());
+    keys.append(key);
+  }
 
   /**
    * @brief This function returns the data read by the parser.
