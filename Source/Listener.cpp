@@ -6,10 +6,10 @@
 
 /**
  * @brief This constructor creates a new empty key storage using the given
- * parent key.
+ *        parent key.
  *
  * @param parent This key specifies the parent of all keys stored in the
- * object.
+ *               object.
  */
 KeyListener::KeyListener(CppKey parent) : keys{} { parents.push(parent); }
 
