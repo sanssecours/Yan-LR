@@ -62,4 +62,4 @@ add_custom_command (OUTPUT ${GENERATED_SOURCE_FILES}
 
 include_directories ("${ANTLR4CPP_INCLUDE_DIRS}" "${CMAKE_CURRENT_BINARY_DIR}")
 add_executable (badger ${SOURCE_FILES})
-target_link_libraries (badger ${ANTLR4CPP_LIBRARIES} elektra elektra-ease)
+target_link_libraries (badger ${ANTLR4CPP_LIBRARIES} elektra)
