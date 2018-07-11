@@ -47,8 +47,11 @@ set (SOURCE_FILES
      "${GENERATED_SOURCE_FILES}"
      Source/main.cpp
      Source/ErrorListener.hpp
+     Source/ErrorListener.cpp
      Source/Listener.hpp
-     Source/YAMLLexer.hpp)
+     Source/Listener.cpp
+     Source/YAMLLexer.hpp
+     Source/YAMLLexer.cpp)
 
 add_custom_command (OUTPUT ${GENERATED_SOURCE_FILES}
                     COMMAND antlr4 -Werror -Dlanguage=Cpp -o

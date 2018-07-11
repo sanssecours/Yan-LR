@@ -1,19 +1,14 @@
 #include <antlr4-runtime.h>
-#include <iostream>
 
-using namespace antlr4;
-using namespace std;
+using antlr4::BaseErrorListener;
+using antlr4::Recognizer;
+using antlr4::Token;
+
+using std::exception_ptr;
+using std::string;
 
 class ErrorListener : public BaseErrorListener {
-
-private:
-  virtual void syntaxError(Recognizer *recognizer __attribute__((unused)),
-                           Token *offendingSymbol __attribute__((unused)),
-                           size_t line, size_t charPositionInLine,
-                           const std::string &message,
-                           std::exception_ptr error
-                           __attribute__((unused))) override {
-    cerr << line << ":" << charPositionInLine << " " << message << endl;
-    exit(EXIT_FAILURE);
-  }
+  void syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line,
+                   size_t charPositionInLine, const string &message,
+                   exception_ptr error);
 };
