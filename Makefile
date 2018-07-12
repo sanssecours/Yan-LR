@@ -33,5 +33,5 @@ configure:
 	@cd Build; cmake -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
 
 clean:
-	@printf '✨ Clean\n'
+	@printf '🗑 Clean\n'
 	@rm -rf Build
