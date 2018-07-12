@@ -9,6 +9,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=integer")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 execute_process (COMMAND antlr4
                  RESULT_VARIABLE ANTLR_NOT_AVAILABLE

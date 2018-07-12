@@ -7,6 +7,13 @@ export CXX := /usr/local/opt/llvm/bin/clang++
 
 .PHONY: compile clean configure test
 
+all: lint
+
+lint: run
+	@printf '\n✨ Lint\n'
+	@oclint -p Build -no-analytics -enable-global-analysis \
+	        -enable-clang-static-analyzer Source/*.cpp
+
 run: test
 	@printf '\n🏃🏼‍♂️ Run\n\n'
 	@sed -nE "s~(^[^'][^=]+)=(.*)~s/<\2>/<\1>/~p" Build/$(GRAMMAR).tokens > \
@@ -23,7 +30,7 @@ clean:
 
 configure:
 	@mkdir -p Build
-	@cd Build; cmake -G Ninja ..
+	@cd Build; cmake -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
 
 compile:
 	@printf '👷🏽‍♀️ Build\n\n'
