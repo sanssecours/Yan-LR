@@ -24,14 +24,14 @@ test: compile
 	@printf '\n🐛 Test\n\n'
 	@Test/test.fish
 
-clean:
-	@printf '✨ Clean\n'
-	@rm -rf Build
+compile:
+	@printf '👷🏽‍♀️ Build\n\n'
+	@ninja -C Build
 
 configure:
 	@mkdir -p Build
 	@cd Build; cmake -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
 
-compile:
-	@printf '👷🏽‍♀️ Build\n\n'
-	@ninja -C Build
+clean:
+	@printf '✨ Clean\n'
+	@rm -rf Build
