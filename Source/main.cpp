@@ -1,9 +1,11 @@
+// -- Imports ------------------------------------------------------------------
+
 #include <fstream>
 
-#include "YAML.h"
 #include <antlr4-runtime.h>
-
 #include <kdb.hpp>
+
+#include "YAML.h"
 
 #include "ErrorListener.hpp"
 #include "Listener.hpp"
@@ -15,6 +17,8 @@ using namespace ckdb;
 using namespace std;
 
 using CppKey = kdb::Key;
+
+// -- Functions ----------------------------------------------------------------
 
 void printTokens(CommonTokenStream &tokens) {
   tokens.fill();
@@ -42,6 +46,8 @@ void setErrorListener(YAML &parser) {
   parser.removeErrorListeners();
   parser.addErrorListener(&errorListener);
 }
+
+// -- Main ---------------------------------------------------------------------
 
 int main(int argc, char const *argv[]) {
 
