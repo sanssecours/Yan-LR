@@ -11,12 +11,21 @@
 #include "Listener.hpp"
 #include "YAMLLexer.hpp"
 
-using namespace antlr;
-using namespace antlr4;
-using namespace ckdb;
-using namespace std;
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::ifstream;
+using std::stringstream;
 
 using CppKey = kdb::Key;
+using ckdb::keyNew;
+
+using antlr4::ANTLRInputStream;
+using antlr4::CommonTokenStream;
+using ParseTree = antlr4::tree::ParseTree;
+using ParseTreeWalker = antlr4::tree::ParseTreeWalker;
+
+using antlr::YAML;
 
 // -- Functions ----------------------------------------------------------------
 
@@ -29,7 +38,7 @@ void printTokens(CommonTokenStream &tokens) {
   cout << endl;
 }
 
-void printTree(antlr4::tree::ParseTree *tree) {
+void printTree(ParseTree *tree) {
   cout << "— Tree ——————" << endl << endl;
   cout << tree->toStringTree() << endl << endl;
 }
@@ -73,10 +82,10 @@ int main(int argc, char const *argv[]) {
   YAML parser(&tokens);
   setErrorListener(parser);
 
-  antlr4::tree::ParseTree *tree = parser.yaml();
+  ParseTree *tree = parser.yaml();
   printTree(tree);
 
-  tree::ParseTreeWalker walker{};
+  ParseTreeWalker walker{};
   KeyListener listener{keyNew("user", KEY_END, "", KEY_VALUE)};
   walker.walk(&listener, tree);
   printOutput(listener);
