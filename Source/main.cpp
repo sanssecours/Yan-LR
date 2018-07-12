@@ -16,6 +16,33 @@ using namespace std;
 
 using CppKey = kdb::Key;
 
+void printTokens(CommonTokenStream &tokens) {
+  tokens.fill();
+  cout << "— Tokens ——————" << endl << endl;
+  for (auto token : tokens.getTokens()) {
+    cout << token->toString() << endl;
+  }
+  cout << endl;
+}
+
+void printTree(antlr4::tree::ParseTree *tree) {
+  cout << "— Tree ——————" << endl << endl;
+  cout << tree->toStringTree() << endl << endl;
+}
+
+void printOutput(KeyListener &listener) {
+  cout << "— Output ————" << endl << endl;
+  for (auto key : listener.keySet()) {
+    cout << key.getName() << ": " << key.getString() << endl;
+  }
+}
+
+void setErrorListener(YAML &parser) {
+  ErrorListener errorListener{};
+  parser.removeErrorListeners();
+  parser.addErrorListener(&errorListener);
+}
+
 int main(int argc, char const *argv[]) {
 
   if (argc < 2) {
@@ -35,29 +62,18 @@ int main(int argc, char const *argv[]) {
   ANTLRInputStream input(text.str());
   YAMLLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
-
-  tokens.fill();
-  cout << "— Tokens ——————" << endl << endl;
-  for (auto token : tokens.getTokens()) {
-    cout << token->toString() << endl;
-  }
+  printTokens(tokens);
 
   YAML parser(&tokens);
-  ErrorListener errorListener{};
-  parser.removeErrorListeners();
-  parser.addErrorListener(&errorListener);
+  setErrorListener(parser);
+
+  antlr4::tree::ParseTree *tree = parser.yaml();
+  printTree(tree);
 
   tree::ParseTreeWalker walker{};
   KeyListener listener{keyNew("user", KEY_END, "", KEY_VALUE)};
-
-  antlr4::tree::ParseTree *tree = parser.yaml();
-  cout << endl << "— Tree ——————" << endl << endl;
-  cout << tree->toStringTree() << endl << endl;
-
-  cout << "— Output ————" << endl << endl;
   walker.walk(&listener, tree);
-  for (auto key : listener.keySet()) {
-    cout << key.getName() << ": " << key.getString() << endl;
-  }
+  printOutput(listener);
+
   return EXIT_SUCCESS;
 }
