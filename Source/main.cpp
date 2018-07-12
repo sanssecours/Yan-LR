@@ -31,7 +31,7 @@ int main(int argc, char const *argv[]) {
 
   stringstream text;
   text << file.rdbuf();
-  cout << "——————————" << endl << text.str() << "——————————" << endl;
+  cout << "——————————" << endl << text.str() << "——————————" << endl; //! OCLint
   ANTLRInputStream input(text.str());
   YAMLLexer lexer(&input);
   CommonTokenStream tokens(&lexer);

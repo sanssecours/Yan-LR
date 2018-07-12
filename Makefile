@@ -1,7 +1,7 @@
 GRAMMAR := YAML
 PARSER := Build/badger
 
-export ASAN_OPTIONS := detect_leaks=1,detect_container_overflow=0
+export ASAN_OPTIONS := detect_leaks=1
 export CC := /usr/local/opt/llvm/bin/clang
 export CXX := /usr/local/opt/llvm/bin/clang++
 
