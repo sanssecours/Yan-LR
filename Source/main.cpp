@@ -31,12 +31,13 @@ int main(int argc, char const *argv[]) {
 
   stringstream text;
   text << file.rdbuf();
-  cout << "——————————" << endl << text.str() << "——————————" << endl; //! OCLint
+  cout << "— Input ———————" << endl << endl << text.str() << endl;
   ANTLRInputStream input(text.str());
   YAMLLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
 
   tokens.fill();
+  cout << "— Tokens ——————" << endl << endl;
   for (auto token : tokens.getTokens()) {
     cout << token->toString() << endl;
   }
@@ -50,9 +51,10 @@ int main(int argc, char const *argv[]) {
   KeyListener listener{keyNew("user", KEY_END, "", KEY_VALUE)};
 
   antlr4::tree::ParseTree *tree = parser.yaml();
-  cout << "——————————" << endl;
-  cout << tree->toStringTree() << endl;
-  cout << "——————————" << endl;
+  cout << endl << "— Tree ——————" << endl << endl;
+  cout << tree->toStringTree() << endl << endl;
+
+  cout << "— Output ————" << endl << endl;
   walker.walk(&listener, tree);
   for (auto key : listener.keySet()) {
     cout << key.getName() << ": " << key.getString() << endl;
