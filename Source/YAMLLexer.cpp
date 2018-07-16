@@ -44,6 +44,7 @@ unique_ptr<Token> YAMLLexer::nextToken() {
   if (tokens.empty()) {
     fetchTokens();
   }
+
   unique_ptr<CommonToken> token = move(tokens.front());
   tokens.pop_front();
   return token;
@@ -141,20 +142,43 @@ unique_ptr<CommonToken> YAMLLexer::commonToken(size_t type, size_t start,
  * @brief This method adds new tokens to the token stream.
  */
 void YAMLLexer::fetchTokens() {
-  if (input->LA(1) == ' ' || input->LA(1) == '\n') {
-    while (input->LA(1) != Token::EOF) {
-      column++;
-      if (input->LA(1) == '\n') {
-        line++;
-        column = 0;
-      }
-      input->consume();
-    }
+  scanToNextToken();
+
+  if (input->LA(1) == Token::EOF) {
     scanEnd();
     return;
   }
 
   scanPlainScalar();
+}
+
+/**
+ * @brief This method consumes a character from the input stream keeping
+ *        track of line and column numbers.
+ */
+void YAMLLexer::forward() {
+  if (input->LA(1) == Token::EOF) {
+    return;
+  }
+
+  column++;
+  if (input->LA(1) == '\n') {
+    column = 0;
+    line++;
+  }
+  input->consume();
+}
+
+/**
+ * @brief This method removes uninteresting characters from the input.
+ */
+void YAMLLexer::scanToNextToken() {
+  while (input->LA(1) == ' ') {
+    forward();
+  }
+  if (input->LA(1) == '\n') {
+    forward();
+  }
 }
 
 /**
@@ -185,7 +209,7 @@ void YAMLLexer::scanPlainScalar() {
 
   while (input->LA(1) != ' ' && input->LA(1) != '\n' &&
          input->LA(1) != Token::EOF) {
-    input->consume();
+    forward();
   }
   tokens.push_back(commonToken(PLAIN_SCALAR, start, input->index() - 1));
 }

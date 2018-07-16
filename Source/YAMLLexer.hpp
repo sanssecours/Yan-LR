@@ -92,6 +92,17 @@ class YAMLLexer : public TokenSource {
   void fetchTokens();
 
   /**
+   * @brief This method consumes a character from the input stream keeping
+   *        track of line and column numbers.
+   */
+  void forward();
+
+  /**
+   * @brief This method removes uninteresting characters from the input.
+   */
+  void scanToNextToken();
+
+  /**
    * @brief This method adds the token for the start of the YAML stream to
    *        `tokens`.
    */
@@ -152,8 +163,8 @@ public:
   CharStream *getInputStream() override;
 
   /**
-   * @brief This method retrieves the name of the source the lexer is currently
-   *        scanning.
+   * @brief This method retrieves the name of the source the lexer is
+   * currently scanning.
    *
    * @return The name of the current input source
    */
