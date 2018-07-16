@@ -87,7 +87,7 @@ class YAMLLexer : public TokenSource {
   unique_ptr<CommonToken> commonToken(size_t type, size_t start, size_t stop);
 
   /**
-   * @brief This method fetches adds new tokens to the token stream
+   * @brief This method adds new tokens to the token stream.
    */
   void fetchTokens();
 
