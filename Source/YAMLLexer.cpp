@@ -21,6 +21,11 @@ using std::cerr;
 using std::endl;
 using std::make_pair;
 
+using spdlog::set_level;
+using spdlog::set_pattern;
+using spdlog::stderr_logger_mt;
+using spdlog::level::trace;
+
 // -- Class --------------------------------------------------------------------
 
 /**
@@ -29,7 +34,11 @@ using std::make_pair;
  * @param input This character stream stores the data this lexer scans.
  */
 YAMLLexer::YAMLLexer(CharStream *input) {
-  cerr << "Init lexer" << endl;
+  set_pattern("[%H:%M:%S:%e] %v ");
+  set_level(trace);
+  console = stderr_logger_mt("console");
+  LOG("Init lexer");
+
   this->input = input;
   this->source = make_pair(this, input);
   scanStart();
@@ -42,13 +51,13 @@ YAMLLexer::YAMLLexer(CharStream *input) {
  * @return A token of the token stream produced by the lexer
  */
 unique_ptr<Token> YAMLLexer::nextToken() {
-  cerr << "Retrieve next token" << endl;
+  LOG("Retrieve next token");
   if (tokens.empty()) {
     fetchTokens();
   }
-  cerr << "Tokens:" << endl;
+  LOG("Tokens:");
   for (unique_ptr<CommonToken> const &token : tokens) {
-    cerr << "\t" << token->toString() << endl;
+    LOGF("\t {}", token->toString());
   }
 
   unique_ptr<CommonToken> token = move(tokens.front());
@@ -164,7 +173,7 @@ void YAMLLexer::fetchTokens() {
  */
 void YAMLLexer::forward() {
   if (input->LA(1) == Token::EOF) {
-    cerr << "Hit EOF!" << endl;
+    LOG("Hit EOF!");
     return;
   }
 
@@ -180,11 +189,11 @@ void YAMLLexer::forward() {
  * @brief This method removes uninteresting characters from the input.
  */
 void YAMLLexer::scanToNextToken() {
-  cerr << "Scan to next token" << endl;
+  LOG("Scan to next token");
   while (input->LA(1) == ' ') {
     forward();
   }
-  cerr << "Skipped whitespace" << endl;
+  LOG("Skipped whitespace");
   if (input->LA(1) == '\n') {
     forward();
   }
@@ -195,7 +204,7 @@ void YAMLLexer::scanToNextToken() {
  *        `tokens`.
  */
 void YAMLLexer::scanStart() {
-  cerr << "Scan start" << endl;
+  LOG("Scan start");
   auto start =
       commonToken(STREAM_START, input->index(), input->index(), "START");
   tokens.push_back(move(start));
@@ -215,7 +224,7 @@ void YAMLLexer::scanEnd() {
  * @brief This method scans a plain scalar and adds it to the token queue.
  */
 void YAMLLexer::scanPlainScalar() {
-  cerr << "Scan plain scalar" << endl;
+  LOG("Scan plain scalar");
   size_t start = input->index();
 
   while (input->LA(1) != ' ' && input->LA(1) != '\n' &&

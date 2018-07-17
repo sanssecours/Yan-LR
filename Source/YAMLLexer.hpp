@@ -13,9 +13,17 @@
  * .
  */
 
+// -- Macros -------------------------------------------------------------------
+
+#define SPDLOG_TRACE_ON
+#define LOGF(fmt, ...)                                                         \
+  console->trace("{}:{}: " fmt, __FUNCTION__, __LINE__, __VA_ARGS__);
+#define LOG(text) console->trace("{}:{}: {}", __FUNCTION__, __LINE__, text);
+
 // -- Imports ------------------------------------------------------------------
 
 #include <antlr4-runtime.h>
+#include <spdlog/spdlog.h>
 
 using antlr4::CharStream;
 using antlr4::CommonToken;
@@ -24,8 +32,11 @@ using antlr4::Token;
 using antlr4::TokenFactory;
 using antlr4::TokenSource;
 
+using spdlog::logger;
+
 using std::deque;
 using std::pair;
+using std::shared_ptr;
 using std::string;
 using std::unique_ptr;
 
@@ -55,6 +66,11 @@ class YAMLLexer : public TokenSource {
    * `line`.
    */
   size_t column = 0;
+
+  /**
+   * This variable stores the logger used by the lexer to print debug messages.
+   */
+  shared_ptr<spdlog::logger> console;
 
   /**
    * This function creates a new token with the specified parameters.
