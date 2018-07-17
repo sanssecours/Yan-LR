@@ -68,6 +68,14 @@ class YAMLLexer : public TokenSource {
   size_t column = 0;
 
   /**
+   * This token stores a possible candidate for a simple key. Since the lexer
+   * only supports block syntax for mappings and sequences we use a single
+   * value here. If we need support for flow collections we have to store
+   * a candidate for each flow level (block context = flow level 0).
+   */
+  unique_ptr<CommonToken> simpleKey;
+
+  /**
    * This variable stores the logger used by the lexer to print debug messages.
    */
   shared_ptr<spdlog::logger> console;
@@ -141,6 +149,8 @@ public:
   static const size_t STREAM_END = 2;
   /** This token type specifies that the token stores a plain scalar. */
   static const size_t PLAIN_SCALAR = 3;
+  /** This token type indicates the start of a mapping key. */
+  static const size_t KEY = 4;
 
   /**
    * @brief This constructor creates a new YAML lexer for the given input.

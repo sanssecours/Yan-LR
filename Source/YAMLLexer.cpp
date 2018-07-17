@@ -226,6 +226,8 @@ void YAMLLexer::scanEnd() {
 void YAMLLexer::scanPlainScalar() {
   LOG("Scan plain scalar");
   size_t start = input->index();
+  // A plain scalar can start a simple key
+  simpleKey = commonToken(KEY, start, start, "KEY");
 
   while (input->LA(1) != ' ' && input->LA(1) != '\n' &&
          input->LA(1) != Token::EOF) {
