@@ -10,7 +10,7 @@ before_install:
       brew install antlr
       brew install antlr4-cpp-runtime
       brew install elektra
-      brew install fish
+      brew install fish --HEAD
       brew install llvm
       brew install ninja
     fi
