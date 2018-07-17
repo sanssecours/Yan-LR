@@ -25,6 +25,12 @@
 #include <antlr4-runtime.h>
 #include <spdlog/spdlog.h>
 
+using std::deque;
+using std::pair;
+using std::shared_ptr;
+using std::string;
+using std::unique_ptr;
+
 using antlr4::CharStream;
 using antlr4::CommonToken;
 using antlr4::CommonTokenFactory;
@@ -33,12 +39,6 @@ using antlr4::TokenFactory;
 using antlr4::TokenSource;
 
 using spdlog::logger;
-
-using std::deque;
-using std::pair;
-using std::shared_ptr;
-using std::string;
-using std::unique_ptr;
 
 // -- Class --------------------------------------------------------------------
 
