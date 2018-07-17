@@ -31,6 +31,13 @@ else (ELEKTRA_FOUND)
   message (FATAL_ERROR "Elektra not found")
 endif (ELEKTRA_FOUND)
 
+find_path (spdlog_INCLUDE_DIR
+           NAMES spdlog/spdlog.h
+           DOC "spdlog library header files")
+if (spdlog_INCLUDE_DIR STREQUAL spdlog_INCLUDE_DIR-NOTFOUND)
+  message (FATAL_ERROR "spdlog not found")
+endif (spdlog_INCLUDE_DIR STREQUAL spdlog_INCLUDE_DIR-NOTFOUND)
+
 set (GRAMMAR_NAME YAML)
 set (GRAMMAR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/Grammar/${GRAMMAR_NAME}.g4)
 set (GENERATED_SOURCE_FILES_NAMES BaseListener Listener)
@@ -61,6 +68,7 @@ add_custom_command (OUTPUT ${GENERATED_SOURCE_FILES}
                     DEPENDS ${GRAMMAR_FILE}
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/Grammar)
 
-include_directories ("${ANTLR4CPP_INCLUDE_DIRS}" "${CMAKE_CURRENT_BINARY_DIR}")
+include_directories ("${ANTLR4CPP_INCLUDE_DIRS}" "${CMAKE_CURRENT_BINARY_DIR}"
+                     "${spdlog_INCLUDE_DIR}")
 add_executable (badger ${SOURCE_FILES})
 target_link_libraries (badger ${ANTLR4CPP_LIBRARIES} elektra)
