@@ -15,8 +15,6 @@
 
 // -- Imports ------------------------------------------------------------------
 
-#include <antlr4-runtime.h>
-
 #include "YAMLLexer.hpp"
 
 using std::cerr;
