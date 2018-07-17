@@ -162,6 +162,8 @@ void YAMLLexer::fetchTokens() {
   if (input->LA(1) == Token::EOF) {
     scanEnd();
     return;
+  } else if (input->LA(1) == ':' && input->LA(2) == ' ') {
+    scanValue();
   }
 
   scanPlainScalar();
@@ -234,4 +236,14 @@ void YAMLLexer::scanPlainScalar() {
     forward();
   }
   tokens.push_back(commonToken(PLAIN_SCALAR, start, input->index() - 1));
+}
+
+/**
+ * @brief This method scans a mapping value and adds it to the token queue.
+ */
+void YAMLLexer::scanValue() {
+  LOG("Scan value");
+  tokens.push_back(commonToken(VALUE, input->index(), input->index() + 1));
+  forward();
+  forward();
 }

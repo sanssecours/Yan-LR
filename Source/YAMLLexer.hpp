@@ -142,6 +142,11 @@ class YAMLLexer : public TokenSource {
    */
   void scanPlainScalar();
 
+  /**
+   * @brief This method scans a mapping value and adds it to the token queue.
+   */
+  void scanValue();
+
 public:
   /** This token type starts the YAML stream. */
   static const size_t STREAM_START = 1;
@@ -151,6 +156,8 @@ public:
   static const size_t PLAIN_SCALAR = 3;
   /** This token type indicates the start of a mapping key. */
   static const size_t KEY = 4;
+  /** This token type indicates the start of a mapping value. */
+  static const size_t VALUE = 5;
 
   /**
    * @brief This constructor creates a new YAML lexer for the given input.
