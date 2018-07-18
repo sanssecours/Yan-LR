@@ -230,8 +230,11 @@ void YAMLLexer::scanPlainScalar() {
   // A plain scalar can start a simple key
   simpleKey = commonToken(KEY, start, start, "KEY");
 
-  while (input->LA(1) != ' ' && input->LA(1) != '\n' &&
-         input->LA(1) != Token::EOF) {
+  string const stop = " \n";
+
+  while (stop.find(input->LA(1)) == string::npos &&
+         input->LA(1) != Token::EOF &&
+         !(input->LA(1) == ':' && input->LA(2) == ' ')) {
     forward();
   }
   tokens.push_back(commonToken(PLAIN_SCALAR, start, input->index() - 1));
