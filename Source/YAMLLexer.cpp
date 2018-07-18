@@ -20,6 +20,8 @@
 using std::endl;
 using std::make_pair;
 
+using antlr4::ParseCancellationException;
+
 using spdlog::set_level;
 using spdlog::set_pattern;
 using spdlog::stderr_logger_mt;
@@ -248,4 +250,12 @@ void YAMLLexer::scanValue() {
   tokens.push_back(commonToken(VALUE, input->index(), input->index() + 1));
   forward();
   forward();
+  if (!simpleKey) {
+    throw ParseCancellationException("Unable to locate key for value");
+  }
+  if (simpleKey->getStartIndex() < column) {
+    tokens.push_front(
+        commonToken(MAPPING_START, simpleKey->getStartIndex(), column));
+  }
+  tokens.push_front(move(simpleKey));
 }
