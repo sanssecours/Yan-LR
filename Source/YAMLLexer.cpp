@@ -198,12 +198,19 @@ void YAMLLexer::forward(size_t const characters = 1) {
  */
 void YAMLLexer::scanToNextToken() {
   LOG("Scan to next token");
-  while (input->LA(1) == ' ') {
-    forward();
-  }
-  LOG("Skipped whitespace");
-  if (input->LA(1) == '\n') {
-    forward();
+  bool found = false;
+  while (!found) {
+    while (input->LA(1) == ' ') {
+      forward();
+    }
+    LOG("Skipped whitespace");
+    if (input->LA(1) == '\n') {
+      forward();
+      LOG("Skipped newline");
+    } else {
+      found = true;
+      LOG("Found next token");
+    }
   }
 }
 
