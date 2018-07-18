@@ -112,6 +112,24 @@ void YAMLLexer::setTokenFactory(TokenFactory<T1> *factory) {
  */
 Ref<TokenFactory<CommonToken>> YAMLLexer::getTokenFactory() { return factory; }
 
+// ========================
+// = Recognizer Interface =
+// ========================
+
+const vector<std::string> &YAMLLexer::getTokenNames() const {
+  return tokenNames;
+}
+
+const vector<std::string> &YAMLLexer::getRuleNames() const {
+  return tokenNames;
+}
+
+string YAMLLexer::getGrammarFileName() const { return "YAML.g4"; }
+
+const ATN &YAMLLexer::getATN() const { return emptyATN; }
+
+void YAMLLexer::setInputStream(IntStream *input __attribute__((unused))) {}
+
 // ===================
 // = Private Methods =
 // ===================
