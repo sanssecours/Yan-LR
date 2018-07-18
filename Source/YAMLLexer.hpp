@@ -30,23 +30,19 @@ using std::pair;
 using std::shared_ptr;
 using std::string;
 using std::unique_ptr;
-using std::vector;
 
 using antlr4::CharStream;
 using antlr4::CommonToken;
 using antlr4::CommonTokenFactory;
-using antlr4::IntStream;
-using antlr4::Recognizer;
 using antlr4::Token;
 using antlr4::TokenFactory;
 using antlr4::TokenSource;
-using antlr4::atn::ATN;
 
 using spdlog::logger;
 
 // -- Class --------------------------------------------------------------------
 
-class YAMLLexer : public TokenSource, public Recognizer {
+class YAMLLexer : public TokenSource {
   /** This variable stores the input that this lexer scans. */
   CharStream *input;
 
@@ -78,8 +74,6 @@ class YAMLLexer : public TokenSource, public Recognizer {
    * a candidate for each flow level (block context = flow level 0).
    */
   unique_ptr<CommonToken> simpleKey;
-
-  ATN emptyATN = ATN();
 
   /**
    * This variable stores the logger used by the lexer to print debug messages.
@@ -165,9 +159,6 @@ public:
   /** This token type indicates the start of a mapping value. */
   static const size_t VALUE = 5;
 
-  vector<std::string> tokenNames{"STREAM_START", "STREAM_END", "PLAIN_SCALAR",
-                                 "KEY", "VALUE"};
-
   /**
    * @brief This constructor creates a new YAML lexer for the given input.
    *
@@ -226,10 +217,4 @@ public:
    * @return The factory the scanner uses to create tokens
    */
   Ref<TokenFactory<CommonToken>> getTokenFactory() override;
-
-  const vector<std::string> &getTokenNames() const override;
-  const vector<std::string> &getRuleNames() const override;
-  string getGrammarFileName() const override;
-  const ATN &getATN() const override;
-  void setInputStream(IntStream *input) override;
 };
