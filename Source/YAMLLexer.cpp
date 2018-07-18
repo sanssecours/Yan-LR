@@ -171,21 +171,26 @@ void YAMLLexer::fetchTokens() {
 }
 
 /**
- * @brief This method consumes a character from the input stream keeping
+ * @brief This method consumes characters from the input stream keeping
  *        track of line and column numbers.
+ *
+ * @param characters This parameter specifies the number of characters the
+ *                   the function should consume.
  */
-void YAMLLexer::forward() {
-  if (input->LA(1) == Token::EOF) {
-    LOG("Hit EOF!");
-    return;
-  }
+void YAMLLexer::forward(size_t const characters = 1) {
+  for (size_t charsLeft = characters; charsLeft > 0; charsLeft--) {
+    if (input->LA(1) == Token::EOF) {
+      LOG("Hit EOF!");
+      return;
+    }
 
-  column++;
-  if (input->LA(1) == '\n') {
-    column = 0;
-    line++;
+    column++;
+    if (input->LA(1) == '\n') {
+      column = 0;
+      line++;
+    }
+    input->consume();
   }
-  input->consume();
 }
 
 /**
@@ -248,8 +253,7 @@ void YAMLLexer::scanPlainScalar() {
 void YAMLLexer::scanValue() {
   LOG("Scan value");
   tokens.push_back(commonToken(VALUE, input->index(), input->index() + 1));
-  forward();
-  forward();
+  forward(2);
   if (!simpleKey) {
     throw ParseCancellationException("Unable to locate key for value");
   }

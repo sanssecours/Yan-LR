@@ -116,10 +116,13 @@ class YAMLLexer : public TokenSource {
   void fetchTokens();
 
   /**
-   * @brief This method consumes a character from the input stream keeping
+   * @brief This method consumes characters from the input stream keeping
    *        track of line and column numbers.
+   *
+   * @param characters This parameter specifies the number of characters the
+   *                   the function should consume.
    */
-  void forward();
+  void forward(size_t const characters);
 
   /**
    * @brief This method removes uninteresting characters from the input.
