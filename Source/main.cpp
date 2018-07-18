@@ -50,12 +50,6 @@ void printOutput(KeyListener &listener) {
   }
 }
 
-void setErrorListener(YAML &parser) {
-  ErrorListener errorListener{};
-  parser.removeErrorListeners();
-  parser.addErrorListener(&errorListener);
-}
-
 // -- Main ---------------------------------------------------------------------
 
 int main(int argc, char const *argv[]) {
@@ -80,7 +74,9 @@ int main(int argc, char const *argv[]) {
   printTokens(tokens);
 
   YAML parser(&tokens);
-  setErrorListener(parser);
+  ErrorListener errorListener{};
+  parser.removeErrorListeners();
+  parser.addErrorListener(&errorListener);
 
   ParseTree *tree = parser.yaml();
   printTree(tree);
