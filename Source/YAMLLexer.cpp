@@ -17,7 +17,6 @@
 
 #include "YAMLLexer.hpp"
 
-using std::cerr;
 using std::endl;
 using std::make_pair;
 
