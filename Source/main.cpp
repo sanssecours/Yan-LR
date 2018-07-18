@@ -86,5 +86,5 @@ int main(int argc, char const *argv[]) {
   walker.walk(&listener, tree);
   printOutput(listener);
 
-  return EXIT_SUCCESS;
+  return parser.getNumberOfSyntaxErrors();
 }

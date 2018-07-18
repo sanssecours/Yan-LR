@@ -31,5 +31,4 @@ void ErrorListener::syntaxError(Recognizer *recognizer __attribute__((unused)),
                                 std::exception_ptr error
                                 __attribute__((unused))) {
   cerr << line << ":" << charPositionInLine << " " << message << endl;
-  exit(EXIT_FAILURE);
 }
