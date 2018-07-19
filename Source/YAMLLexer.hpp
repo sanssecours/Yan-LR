@@ -28,6 +28,7 @@
 using std::deque;
 using std::pair;
 using std::shared_ptr;
+using std::stack;
 using std::string;
 using std::unique_ptr;
 
@@ -66,6 +67,8 @@ class YAMLLexer : public TokenSource {
    * `line`.
    */
   size_t column = 0;
+
+  stack<long long> indents{deque<long long>{-1}};
 
   /**
    * This token stores a possible candidate for a simple key. Since the lexer
@@ -130,6 +133,15 @@ class YAMLLexer : public TokenSource {
   void scanToNextToken();
 
   /**
+   * @brief This method adds block closing tokens to the token queue, if the
+   *        indentation decreased.
+   *
+   * @param column This parameter specifies the column (indentation in number
+   *               of spaces) for which this method should add block end tokens.
+   */
+  void addBlockEnd(long long column);
+
+  /**
    * @brief This method adds the token for the start of the YAML stream to
    *        `tokens`.
    */
@@ -163,6 +175,8 @@ public:
   static const size_t VALUE = 5;
   /** This token type indicates the start of a mapping. */
   static const size_t MAPPING_START = 6;
+  /** This token type indicates the end of a block collection. */
+  static const size_t BLOCK_END = 7;
 
   /**
    * @brief This constructor creates a new YAML lexer for the given input.

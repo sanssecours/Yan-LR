@@ -161,6 +161,8 @@ unique_ptr<CommonToken> YAMLLexer::commonToken(size_t type, size_t start,
 void YAMLLexer::fetchTokens() {
   scanToNextToken();
 
+  addBlockEnd(column);
+
   if (input->LA(1) == Token::EOF) {
     scanEnd();
     return;
@@ -216,6 +218,22 @@ void YAMLLexer::scanToNextToken() {
 }
 
 /**
+ * @brief This method adds block closing tokens to the token queue, if the
+ *        indentation decreased.
+ *
+ * @param column This parameter specifies the column (indentation in number
+ *               of spaces) for which this method should add block end tokens.
+ */
+void YAMLLexer::addBlockEnd(long long column) {
+  LOG("Add block end");
+  while (column < indents.top()) {
+    tokens.push_back(
+        commonToken(BLOCK_END, indents.top(), column, "BLOCK END"));
+    indents.pop();
+  }
+}
+
+/**
  * @brief This method adds the token for the start of the YAML stream to
  *        `tokens`.
  */
@@ -230,6 +248,7 @@ void YAMLLexer::scanStart() {
  * @brief This method adds the end markers to the token queue.
  */
 void YAMLLexer::scanEnd() {
+  addBlockEnd(-1);
   tokens.push_back(
       commonToken(STREAM_END, input->index(), input->index(), "END"));
   tokens.push_back(
@@ -266,8 +285,10 @@ void YAMLLexer::scanValue() {
     throw ParseCancellationException("Unable to locate key for value");
   }
   if (simpleKey->getStartIndex() < column) {
-    tokens.push_front(
-        commonToken(MAPPING_START, simpleKey->getStartIndex(), column));
+    tokens.push_front(commonToken(MAPPING_START, simpleKey->getStartIndex(),
+                                  column, "MAPPING START"));
+    LOGF("Add indentation {}", simpleKey->getStartIndex());
+    indents.push(simpleKey->getStartIndex());
   }
-  tokens.push_front(move(simpleKey));
+  tokens.insert(tokens.begin() + 1, move(simpleKey));
 }
