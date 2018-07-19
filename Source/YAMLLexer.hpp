@@ -68,6 +68,10 @@ class YAMLLexer : public TokenSource {
    */
   size_t column = 0;
 
+  /**
+   * This stack stores the indentation (in number of characters) for each
+   * block collection.
+   */
   stack<long long> indents{deque<long long>{-1}};
 
   /**
