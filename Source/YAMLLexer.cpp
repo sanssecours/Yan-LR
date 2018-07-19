@@ -225,8 +225,8 @@ void YAMLLexer::scanToNextToken() {
  *               of spaces) for which this method should add block end tokens.
  */
 void YAMLLexer::addBlockEnd(long long column) {
-  LOG("Add block end");
   while (column < indents.top()) {
+    LOG("Add block end");
     tokens.push_back(
         commonToken(BLOCK_END, indents.top(), column, "BLOCK END"));
     indents.pop();
