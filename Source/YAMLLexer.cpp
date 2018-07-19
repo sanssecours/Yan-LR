@@ -53,7 +53,8 @@ YAMLLexer::YAMLLexer(CharStream *input) {
  */
 unique_ptr<Token> YAMLLexer::nextToken() {
   LOG("Retrieve next token");
-  if (tokens.empty()) {
+  while ((tokens.empty() || simpleKey != nullptr) &&
+         input->LA(1) != Token::EOF) {
     fetchTokens();
   }
   LOG("Tokens:");
