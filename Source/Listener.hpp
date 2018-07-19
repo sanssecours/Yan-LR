@@ -9,7 +9,7 @@
 using std::stack;
 
 using antlr::YAMLBaseListener;
-using ValueContext = antlr::YAML::ValueContext;
+using ScalarContext = antlr::YAML::ScalarContext;
 
 using CppKey = kdb::Key;
 using CppKeySet = kdb::KeySet;
@@ -51,5 +51,5 @@ public:
    *
    * @param context The context specifies data matched by the rule.
    */
-  void exitValue(ValueContext *context) override;
+  void exitScalar(ScalarContext *context) override;
 };

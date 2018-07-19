@@ -18,7 +18,7 @@ KeyListener::KeyListener(CppKey parent) : keys{} { parents.push(parent); }
  *
  * @param context The context specifies data matched by the rule.
  */
-void KeyListener::exitValue(ValueContext *context) {
+void KeyListener::exitScalar(ScalarContext *context) {
   CppKey key = parents.top();
   key.setString(context->getText());
   keys.append(key);
