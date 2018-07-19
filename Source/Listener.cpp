@@ -14,6 +14,13 @@
 KeyListener::KeyListener(CppKey parent) : keys{} { parents.push(parent); }
 
 /**
+ * @brief This function returns the data read by the parser.
+ *
+ * @return The key set representing the data from the textual input
+ */
+CppKeySet KeyListener::keySet() { return keys; }
+
+/**
  * @brief This function will be called after the parser exits a value.
  *
  * @param context The context specifies data matched by the rule.
@@ -47,10 +54,3 @@ void KeyListener::exitPair(PairContext *context __attribute__((unused))) {
   // remove the key for `part` from the stack.
   parents.pop();
 }
-
-/**
- * @brief This function returns the data read by the parser.
- *
- * @return The key set representing the data from the textual input
- */
-CppKeySet KeyListener::keySet() { return keys; }
