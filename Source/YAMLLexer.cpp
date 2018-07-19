@@ -283,7 +283,7 @@ void YAMLLexer::scanValue() {
   LOG("Scan value");
   tokens.push_back(commonToken(VALUE, input->index(), input->index() + 1));
   forward(2);
-  if (!simpleKey) {
+  if (simpleKey == nullptr) {
     throw ParseCancellationException("Unable to locate key for value");
   }
   if (simpleKey->getStartIndex() < column) {
