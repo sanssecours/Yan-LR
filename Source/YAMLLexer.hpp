@@ -69,6 +69,13 @@ class YAMLLexer : public TokenSource {
   size_t column = 0;
 
   /**
+   * This counter stores the number of tokens already emitted by the lexer.
+   * The lexer needs this variable, to keep track of the insertion point of
+   * `KEY` tokens in the token queue.
+   */
+  size_t tokensEmitted = 0;
+
+  /**
    * This stack stores the indentation (in number of characters) for each
    * block collection.
    */
