@@ -56,10 +56,10 @@ unique_ptr<Token> YAMLLexer::nextToken() {
   while ((tokens.empty() || simpleKey != nullptr) &&
          input->LA(1) != Token::EOF) {
     fetchTokens();
-  }
-  LOG("Tokens:");
-  for (unique_ptr<CommonToken> const &token : tokens) {
-    LOGF("\t {}", token->toString());
+    LOG("Tokens:");
+    for (unique_ptr<CommonToken> const &token : tokens) {
+      LOGF("\t {}", token->toString());
+    }
   }
 
   unique_ptr<CommonToken> token = move(tokens.front());
