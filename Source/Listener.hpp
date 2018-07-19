@@ -9,7 +9,8 @@
 using std::stack;
 
 using antlr::YAMLBaseListener;
-using ScalarContext = antlr::YAML::ScalarContext;
+using ValueContext = antlr::YAML::ValueContext;
+using PairContext = antlr::YAML::PairContext;
 
 using CppKey = kdb::Key;
 using CppKeySet = kdb::KeySet;
@@ -47,9 +48,25 @@ public:
   CppKeySet keySet();
 
   /**
-   * @brief This function will be called after the parser exits a scalar value.
+   * @brief This function will be called after the parser exits a value.
    *
    * @param context The context specifies data matched by the rule.
    */
-  void exitScalar(ScalarContext *context) override;
+  void exitValue(ValueContext *context) override;
+
+  /**
+   * @brief This function will be called after the parser enters a key-value
+   *        pair.
+   *
+   * @param context The context specifies data matched by the rule.
+   */
+  virtual void enterPair(PairContext *context) override;
+
+  /**
+   * @brief This function will be called after the parser exits a key-value
+   *        pair.
+   *
+   * @param context The context specifies data matched by the rule.
+   */
+  virtual void exitPair(PairContext *context) override;
 };

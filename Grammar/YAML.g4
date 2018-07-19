@@ -5,7 +5,7 @@ options {
 }
 
 yaml : STREAM_START child? STREAM_END EOF ;
-child : scalar | map;
+child : value | map;
 
 map : MAPPING_START pair BLOCK_END ;
 pair : KEY key VALUE value ;
