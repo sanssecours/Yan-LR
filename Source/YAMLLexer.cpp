@@ -65,6 +65,7 @@ unique_ptr<Token> YAMLLexer::nextToken() {
   unique_ptr<CommonToken> token = move(tokens.front());
   tokens.pop_front();
   tokensEmitted++;
+  LOGF("Emit token {}", token->toString());
   return token;
 }
 
