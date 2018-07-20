@@ -2,6 +2,25 @@
 
 #include "Listener.hpp"
 
+// -- Functions ----------------------------------------------------------------
+
+/**
+ * @brief This function converts a given number to an array base name.
+ *
+ * @param index This number specifies the index of the array entry.
+ *
+ * @return A string representing the given indices as Elektra array name.
+ */
+string indexToArrayBaseName(uintmax_t const index) {
+  size_t digits = 1;
+
+  for (uintmax_t value = index; value > 9; digits++) {
+    value /= 10;
+  }
+
+  return "#" + string(digits - 1, '_') + to_string(index);
+}
+
 // -- Class --------------------------------------------------------------------
 
 /**
@@ -53,4 +72,60 @@ void KeyListener::exitPair(PairContext *context __attribute__((unused))) {
   // Returning from a mapping such as `part: …` means that we need need to
   // remove the key for `part` from the stack.
   parents.pop();
+}
+
+/**
+ * @brief This function will be called after the parser enters a sequence.
+ *
+ * @param context The context specifies data matched by the rule.
+ */
+void KeyListener::enterSequence(SequenceContext *context
+                                __attribute__((unused))) {
+  indices.push(0);
+  parents.top().setMeta("array", ""); // We start with an empty array
+}
+
+/**
+ * @brief This function will be called after the parser exits a sequence.
+ *
+ * @param context The context specifies data matched by the rule.
+ */
+void KeyListener::exitSequence(SequenceContext *context
+                               __attribute__((unused))) {
+  // We add the parent key of all array elements after we leave the sequence
+  keys.append(parents.top());
+  indices.pop();
+}
+
+/**
+ * @brief This function will be called after the parser recognizes an element
+ *        of a sequence.
+ *
+ * @param context The context specifies data matched by the rule.
+ */
+void KeyListener::enterElement(ElementContext *context
+                               __attribute__((unused))) {
+
+  CppKey key{parents.top().getName(), KEY_END};
+  key.addBaseName(indexToArrayBaseName(indices.top()));
+
+  uintmax_t index = indices.top();
+  indices.pop();
+  if (index < UINTMAX_MAX) {
+    index++;
+  }
+  indices.push(index);
+
+  parents.top().setMeta("array", key.getBaseName());
+  parents.push(key);
+}
+
+/**
+ * @brief This function will be called after the parser read an element of a
+ *        sequence.
+ *
+ * @param context The context specifies data matched by the rule.
+ */
+void KeyListener::exitElement(ElementContext *context __attribute__((unused))) {
+  parents.pop(); // Remove the key for the current array entry
 }

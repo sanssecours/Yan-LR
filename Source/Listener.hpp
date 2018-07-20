@@ -7,10 +7,14 @@
 #include "YAMLBaseListener.h"
 
 using std::stack;
+using std::string;
+using std::to_string;
 
 using antlr::YAMLBaseListener;
 using ValueContext = antlr::YAML::ValueContext;
 using PairContext = antlr::YAML::PairContext;
+using SequenceContext = antlr::YAML::SequenceContext;
+using ElementContext = antlr::YAML::ElementContext;
 
 using CppKey = kdb::Key;
 using CppKeySet = kdb::KeySet;
@@ -29,6 +33,11 @@ class KeyListener : public YAMLBaseListener {
    * parent.
    */
   stack<CppKey> parents;
+
+  /**
+   * This stack stores indices for the next array elements.
+   */
+  stack<uintmax_t> indices;
 
 public:
   /**
@@ -69,4 +78,34 @@ public:
    * @param context The context specifies data matched by the rule.
    */
   virtual void exitPair(PairContext *context) override;
+
+  /**
+   * @brief This function will be called after the parser enters a sequence.
+   *
+   * @param context The context specifies data matched by the rule.
+   */
+  virtual void enterSequence(SequenceContext *context) override;
+
+  /**
+   * @brief This function will be called after the parser exits a sequence.
+   *
+   * @param context The context specifies data matched by the rule.
+   */
+  virtual void exitSequence(SequenceContext *context) override;
+
+  /**
+   * @brief This function will be called after the parser recognizes an element
+   *        of a sequence.
+   *
+   * @param context The context specifies data matched by the rule.
+   */
+  virtual void enterElement(ElementContext *context) override;
+
+  /**
+   * @brief This function will be called after the parser read an element of a
+   *        sequence.
+   *
+   * @param context The context specifies data matched by the rule.
+   */
+  virtual void exitElement(ElementContext *context) override;
 };
