@@ -9,7 +9,7 @@ child : value | map | sequence;
 
 map : MAPPING_START pairs BLOCK_END ;
 pairs : pair+ ;
-pair : KEY key VALUE value;
+pair : KEY key VALUE child;
 key : scalar ;
 value : scalar ;
 
