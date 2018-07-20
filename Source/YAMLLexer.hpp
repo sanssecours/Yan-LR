@@ -170,6 +170,11 @@ class YAMLLexer : public TokenSource {
   void scanToNextToken();
 
   /**
+   * @brief This method checks if the current input starts a key value token.
+   */
+  bool isValue();
+
+  /**
    * @brief This method adds block closing tokens to the token queue, if the
    *        indentation decreased.
    *

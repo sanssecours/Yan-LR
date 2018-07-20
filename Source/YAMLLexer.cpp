@@ -34,11 +34,6 @@ namespace {
  * This constant stores the text that indicates a YAML list element.
  */
 string const elementSign = "- ";
-
-/**
- * This constant stores the text that indicates a YAML mapping value.
- */
-string const valueSign = ": ";
 } // namespace
 
 // -- Class --------------------------------------------------------------------
@@ -222,7 +217,7 @@ void YAMLLexer::fetchTokens() {
   if (input->LA(1) == Token::EOF) {
     scanEnd();
     return;
-  } else if (lookaheadIs(valueSign)) {
+  } else if (isValue()) {
     scanValue();
     return;
   } else if (lookaheadIs(elementSign)) {
@@ -278,6 +273,13 @@ void YAMLLexer::scanToNextToken() {
 }
 
 /**
+ * @brief This method checks if the current input starts a key value token.
+ */
+bool YAMLLexer::isValue() {
+  return (input->LA(1) == ':') && (input->LA(2) == '\n' || input->LA(2) == ' ');
+}
+
+/**
  * @brief This method adds block closing tokens to the token queue, if the
  *        indentation decreased.
  *
@@ -328,7 +330,7 @@ void YAMLLexer::scanPlainScalar() {
   string const stop = " \n";
 
   while (stop.find(input->LA(1)) == string::npos &&
-         input->LA(1) != Token::EOF && !lookaheadIs(valueSign)) {
+         input->LA(1) != Token::EOF && !isValue()) {
     forward();
   }
   tokens.push_back(commonToken(PLAIN_SCALAR, start, input->index() - 1));
