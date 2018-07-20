@@ -46,7 +46,8 @@ void printTree(ParseTree *tree) {
 void printOutput(KeyListener &listener) {
   cout << "— Output ————" << endl << endl;
   for (auto key : listener.keySet()) {
-    cout << key.getName() << ": " << key.getString() << endl;
+    cout << key.getName() << ":"
+         << (key.getStringSize() > 1 ? " " + key.getString() : "") << endl;
   }
 }
 
