@@ -303,7 +303,8 @@ void YAMLLexer::scanPlainScalar() {
 }
 
 /**
- * @brief This method scans a mapping value and adds it to the token queue.
+ * @brief This method scans a mapping value token and adds it to the token
+ *        queue.
  */
 void YAMLLexer::scanValue() {
   LOG("Scan value");

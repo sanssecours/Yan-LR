@@ -188,7 +188,8 @@ class YAMLLexer : public TokenSource {
   void scanPlainScalar();
 
   /**
-   * @brief This method scans a mapping value and adds it to the token queue.
+   * @brief This method scans a mapping value token and adds it to the token
+   *        queue.
    */
   void scanValue();
 
