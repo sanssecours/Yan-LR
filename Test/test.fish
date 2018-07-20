@@ -8,7 +8,7 @@ function cleanup -d 'Remove temporary files'
 end
 
 set IFS (printf '\n\b')
-for file in (find Input -depth 1 -type file -name '*.yaml')
+for file in (find Input -depth 1 -type file -name '*.yaml' | sort)
     printf "• Test file “%s”\n" "$file"
 
     set output (mktemp)
