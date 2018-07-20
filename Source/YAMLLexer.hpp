@@ -149,6 +149,18 @@ class YAMLLexer : public TokenSource {
   unique_ptr<CommonToken> commonToken(size_t type, size_t start, size_t stop);
 
   /**
+   * @brief This function adds an indentation value if the given value is
+   * smaller than the current indentation.
+   *
+   * @param column This parameter specifies the indentation value that this
+   *               function compares to the current indentation.
+   *
+   * @retval true If the function added an indentation value
+   *         false Otherwise
+   */
+  bool addIndentation(size_t const column);
+
+  /**
    * @brief This method adds new tokens to the token stream.
    */
   void fetchTokens();

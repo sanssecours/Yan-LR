@@ -189,6 +189,25 @@ unique_ptr<CommonToken> YAMLLexer::commonToken(size_t type, size_t start,
 }
 
 /**
+ * @brief This function adds an indentation value if the given value is smaller
+ *        than the current indentation.
+ *
+ * @param column This parameter specifies the indentation value that this
+ *               function compares to the current indentation.
+ *
+ * @retval true If the function added an indentation value
+ *         false Otherwise
+ */
+bool YAMLLexer::addIndentation(size_t const column) {
+  if (this->column > column) {
+    LOGF("Add indentation {}", this->column);
+    indents.push(column);
+    return true;
+  }
+  return false;
+}
+
+/**
  * @brief This method adds new tokens to the token stream.
  */
 void YAMLLexer::fetchTokens() {
@@ -325,11 +344,9 @@ void YAMLLexer::scanValue() {
   size_t start = simpleKey.first->getStartIndex();
   tokens.insert(tokens.begin() + simpleKey.second - tokensEmitted,
                 move(simpleKey.first));
-  if (start < column) {
+  if (addIndentation(start)) {
     tokens.push_front(
         commonToken(MAPPING_START, start, column, "MAPPING START"));
-    LOGF("Add indentation {}", start);
-    indents.push(start);
   }
 }
 
