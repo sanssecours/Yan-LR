@@ -131,24 +131,6 @@ string const YAMLLexer::elementSign = "- ";
 string const YAMLLexer::valueSign = ": ";
 
 /**
- * This function creates a new token with the specified parameters.
- *
- * @param type This parameter specifies the type of the token this function
- *             should create.
- * @param start This number specifies the start index of the returned token
- *              inside the character stream `input`.
- * @param stop This number specifies the stop index of the returned token
- *             inside the character stream `input`.
- *
- * @return A token with the specified parameters
- */
-unique_ptr<CommonToken> YAMLLexer::commonToken(size_t type, size_t start,
-                                               size_t stop) {
-  return factory->create(source, type, "", Token::DEFAULT_CHANNEL, start, stop,
-                         line, column);
-}
-
-/**
  * This function checks if the lookahead of the lexer matches the given string.
  *
  * @param text This variable stores the text this function compares to the
@@ -167,6 +149,24 @@ bool YAMLLexer::lookaheadIs(string const &text) {
     position++;
   }
   return true;
+}
+
+/**
+ * This function creates a new token with the specified parameters.
+ *
+ * @param type This parameter specifies the type of the token this function
+ *             should create.
+ * @param start This number specifies the start index of the returned token
+ *              inside the character stream `input`.
+ * @param stop This number specifies the stop index of the returned token
+ *             inside the character stream `input`.
+ *
+ * @return A token with the specified parameters
+ */
+unique_ptr<CommonToken> YAMLLexer::commonToken(size_t type, size_t start,
+                                               size_t stop) {
+  return factory->create(source, type, "", Token::DEFAULT_CHANNEL, start, stop,
+                         line, column);
 }
 
 /**
