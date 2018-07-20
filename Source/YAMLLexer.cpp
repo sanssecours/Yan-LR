@@ -196,6 +196,7 @@ void YAMLLexer::fetchTokens() {
     return;
   } else if (lookaheadIs(valueSign)) {
     scanValue();
+    return;
   }
 
   scanPlainScalar();
