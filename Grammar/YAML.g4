@@ -15,6 +15,6 @@ value : scalar ;
 
 sequence : SEQUENCE_START elements BLOCK_END ;
 elements : element+ ;
-element : ELEMENT value ;
+element : ELEMENT child ;
 
 scalar : PLAIN_SCALAR;
