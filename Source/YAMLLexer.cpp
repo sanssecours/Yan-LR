@@ -53,7 +53,7 @@ YAMLLexer::YAMLLexer(CharStream *input) {
  */
 unique_ptr<Token> YAMLLexer::nextToken() {
   LOG("Retrieve next token");
-  while ((tokens.empty() || simpleKey != nullptr) &&
+  while ((tokens.empty() || simpleKey.first != nullptr) &&
          input->LA(1) != Token::EOF) {
     fetchTokens();
     LOG("Tokens:");
@@ -264,7 +264,8 @@ void YAMLLexer::scanPlainScalar() {
   LOG("Scan plain scalar");
   size_t start = input->index();
   // A plain scalar can start a simple key
-  simpleKey = commonToken(KEY, start, start, "KEY");
+  size_t position = tokens.size() + tokensEmitted;
+  simpleKey = make_pair(commonToken(KEY, start, start, "KEY"), position);
 
   string const stop = " \n";
 
@@ -283,14 +284,16 @@ void YAMLLexer::scanValue() {
   LOG("Scan value");
   tokens.push_back(commonToken(VALUE, input->index(), input->index() + 1));
   forward(2);
-  if (simpleKey == nullptr) {
+  if (simpleKey.first == nullptr) {
     throw ParseCancellationException("Unable to locate key for value");
   }
-  if (simpleKey->getStartIndex() < column) {
-    tokens.push_front(commonToken(MAPPING_START, simpleKey->getStartIndex(),
-                                  column, "MAPPING START"));
-    LOGF("Add indentation {}", simpleKey->getStartIndex());
-    indents.push(simpleKey->getStartIndex());
+  size_t start = simpleKey.first->getStartIndex();
+  tokens.insert(tokens.begin() + simpleKey.second - tokensEmitted,
+                move(simpleKey.first));
+  if (start < column) {
+    tokens.push_front(
+        commonToken(MAPPING_START, start, column, "MAPPING START"));
+    LOGF("Add indentation {}", start);
+    indents.push(start);
   }
-  tokens.insert(tokens.begin() + 1, move(simpleKey));
 }
