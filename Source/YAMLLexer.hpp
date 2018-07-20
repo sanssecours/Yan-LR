@@ -171,6 +171,9 @@ class YAMLLexer : public TokenSource {
 
   /**
    * @brief This method checks if the current input starts a key value token.
+   *
+   * @retval true If the input matches a key value token
+   *         false Otherwise
    */
   bool isValue();
 

@@ -275,6 +275,9 @@ void YAMLLexer::scanToNextToken() {
 
 /**
  * @brief This method checks if the current input starts a key value token.
+ *
+ * @retval true If the input matches a key value token
+ *         false Otherwise
  */
 bool YAMLLexer::isValue() {
   return (input->LA(1) == ':') && (input->LA(2) == '\n' || input->LA(2) == ' ');
