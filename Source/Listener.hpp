@@ -28,6 +28,7 @@ using CppKeySet = kdb::KeySet;
 class KeyListener : public YAMLBaseListener {
   /** This variable stores a key set representing the textual input. */
   CppKeySet keys;
+
   /**
    * This stack stores a key for each level of the current key name below
    * parent.
