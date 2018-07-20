@@ -97,8 +97,8 @@ class YAMLLexer : public TokenSource {
   shared_ptr<spdlog::logger> console;
 
   /**
-   * This function checks if the lookahead of the lexer matches the given
-   * string.
+   * @brief This function checks if the lookahead of the lexer matches the given
+   *        string.
    *
    * @param text This variable stores the text this function compares to the
    *             input at the current position.
@@ -109,7 +109,7 @@ class YAMLLexer : public TokenSource {
   bool lookaheadIs(string const &text);
 
   /**
-   * This function creates a new token with the specified parameters.
+   * @brief This function creates a new token with the specified parameters.
    *
    * @param type This parameter specifies the type of the token this function
    *             should create.
@@ -125,7 +125,7 @@ class YAMLLexer : public TokenSource {
                                       string text);
 
   /**
-   * This function creates a new token with the specified parameters.
+   * @brief This function creates a new token with the specified parameters.
    *
    * @param type This parameter specifies the type of the token this function
    *             should create.

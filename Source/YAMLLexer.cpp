@@ -130,7 +130,8 @@ Ref<TokenFactory<CommonToken>> YAMLLexer::getTokenFactory() { return factory; }
 // ===========
 
 /**
- * This function checks if the lookahead of the lexer matches the given string.
+ * @brief This function checks if the lookahead of the lexer matches the given
+ *        string.
  *
  * @param text This variable stores the text this function compares to the
  *             input at the current position.
@@ -151,7 +152,7 @@ bool YAMLLexer::lookaheadIs(string const &text) {
 }
 
 /**
- * This function creates a new token with the specified parameters.
+ * @brief This function creates a new token with the specified parameters.
  *
  * @param type This parameter specifies the type of the token this function
  *             should create.
@@ -169,7 +170,7 @@ unique_ptr<CommonToken> YAMLLexer::commonToken(size_t type, size_t start,
 }
 
 /**
- * This function creates a new token with the specified parameters.
+ * @brief This function creates a new token with the specified parameters.
  *
  * @param type This parameter specifies the type of the token this function
  *             should create.
