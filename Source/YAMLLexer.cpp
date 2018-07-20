@@ -199,7 +199,7 @@ unique_ptr<CommonToken> YAMLLexer::commonToken(size_t type, size_t start,
  *         false Otherwise
  */
 bool YAMLLexer::addIndentation(size_t const column) {
-  if (this->column > column) {
+  if (static_cast<long long>(column) > indents.top()) {
     LOGF("Add indentation {}", this->column);
     indents.push(column);
     return true;
@@ -341,7 +341,7 @@ void YAMLLexer::scanValue() {
   if (simpleKey.first == nullptr) {
     throw ParseCancellationException("Unable to locate key for value");
   }
-  size_t start = simpleKey.first->getStartIndex();
+  size_t start = simpleKey.first->getCharPositionInLine();
   tokens.insert(tokens.begin() + simpleKey.second - tokensEmitted,
                 move(simpleKey.first));
   if (addIndentation(start)) {
