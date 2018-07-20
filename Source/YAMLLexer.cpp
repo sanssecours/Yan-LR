@@ -121,6 +121,11 @@ Ref<TokenFactory<CommonToken>> YAMLLexer::getTokenFactory() { return factory; }
 // ===========
 
 /**
+ * This constant stores the text that indicates a YAML list element.
+ */
+string const YAMLLexer::elementSign = "- ";
+
+/**
  * This constant stores the text that indicates a YAML mapping value.
  */
 string const YAMLLexer::valueSign = ": ";
@@ -196,6 +201,9 @@ void YAMLLexer::fetchTokens() {
     return;
   } else if (lookaheadIs(valueSign)) {
     scanValue();
+    return;
+  } else if (lookaheadIs(elementSign)) {
+    scanElement();
     return;
   }
 
@@ -323,4 +331,14 @@ void YAMLLexer::scanValue() {
     LOGF("Add indentation {}", start);
     indents.push(start);
   }
+}
+
+/**
+ * @brief This method scans a list element token and adds it to the token
+ *        queue.
+ */
+void YAMLLexer::scanElement() {
+  LOG("Scan element");
+  tokens.push_back(commonToken(ELEMENT, input->index(), input->index() + 1));
+  forward(2);
 }

@@ -45,6 +45,11 @@ using spdlog::logger;
 
 class YAMLLexer : public TokenSource {
   /**
+   * This constant stores the text that indicates a YAML list element.
+   */
+  static string const elementSign;
+
+  /**
    * This constant stores the text that indicates a YAML mapping value.
    */
   static string const valueSign;
@@ -193,6 +198,12 @@ class YAMLLexer : public TokenSource {
    */
   void scanValue();
 
+  /**
+   * @brief This method scans a list element token and adds it to the token
+   *        queue.
+   */
+  void scanElement();
+
 public:
   /** This token type starts the YAML stream. */
   static const size_t STREAM_START = 1;
@@ -208,6 +219,8 @@ public:
   static const size_t MAPPING_START = 6;
   /** This token type indicates the end of a block collection. */
   static const size_t BLOCK_END = 7;
+  /** This token type indicates a list element. */
+  static const size_t ELEMENT = 8;
 
   /**
    * @brief This constructor creates a new YAML lexer for the given input.
