@@ -97,18 +97,6 @@ class YAMLLexer : public TokenSource {
   shared_ptr<spdlog::logger> console;
 
   /**
-   * @brief This function checks if the lookahead of the lexer matches the given
-   *        string.
-   *
-   * @param text This variable stores the text this function compares to the
-   *             input at the current position.
-   *
-   * @retval true If `text` matches the current input
-   *         false Otherwise
-   */
-  bool lookaheadIs(string const &text);
-
-  /**
    * @brief This function creates a new token with the specified parameters.
    *
    * @param type This parameter specifies the type of the token this function
@@ -176,6 +164,14 @@ class YAMLLexer : public TokenSource {
    *         false Otherwise
    */
   bool isValue();
+
+  /**
+   * @brief This method checks if the current input starts a list element.
+   *
+   * @retval true If the input matches a list element token
+   *         false Otherwise
+   */
+  bool isElement();
 
   /**
    * @brief This method adds block closing tokens to the token queue, if the

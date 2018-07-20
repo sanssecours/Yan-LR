@@ -130,28 +130,6 @@ Ref<TokenFactory<CommonToken>> YAMLLexer::getTokenFactory() { return factory; }
 // ===========
 
 /**
- * @brief This function checks if the lookahead of the lexer matches the given
- *        string.
- *
- * @param text This variable stores the text this function compares to the
- *             input at the current position.
- *
- * @retval true If `text` matches the current input
- *         false Otherwise
- */
-bool YAMLLexer::lookaheadIs(string const &text) {
-  size_t position = 1;
-
-  for (size_t const &character : text) {
-    if (input->LA(position) == Token::EOF || input->LA(position) != character) {
-      return false;
-    }
-    position++;
-  }
-  return true;
-}
-
-/**
  * @brief This function creates a new token with the specified parameters.
  *
  * @param type This parameter specifies the type of the token this function
@@ -221,7 +199,7 @@ void YAMLLexer::fetchTokens() {
   } else if (isValue()) {
     scanValue();
     return;
-  } else if (lookaheadIs(elementSign)) {
+  } else if (isElement()) {
     scanElement();
     return;
   }
@@ -281,6 +259,16 @@ void YAMLLexer::scanToNextToken() {
  */
 bool YAMLLexer::isValue() {
   return (input->LA(1) == ':') && (input->LA(2) == '\n' || input->LA(2) == ' ');
+}
+
+/**
+ * @brief This method checks if the current input starts a list element.
+ *
+ * @retval true If the input matches a list element token
+ *         false Otherwise
+ */
+bool YAMLLexer::isElement() {
+  return (input->LA(1) == '-') && (input->LA(2) == '\n' || input->LA(2) == ' ');
 }
 
 /**
