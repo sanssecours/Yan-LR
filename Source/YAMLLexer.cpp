@@ -360,6 +360,10 @@ void YAMLLexer::scanValue() {
  */
 void YAMLLexer::scanElement() {
   LOG("Scan element");
+  if (addIndentation(column)) {
+    tokens.push_front(
+        commonToken(SEQUENCE_START, input->index(), column, "SEQUENCE START"));
+  }
   tokens.push_back(commonToken(ELEMENT, input->index(), input->index() + 1));
   forward(2);
 }

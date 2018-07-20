@@ -223,6 +223,8 @@ public:
   static const size_t BLOCK_END = 7;
   /** This token type indicates a list element. */
   static const size_t ELEMENT = 8;
+  /** This token type indicates the start of a sequence. */
+  static const size_t SEQUENCE_START = 9;
 
   /**
    * @brief This constructor creates a new YAML lexer for the given input.
