@@ -116,9 +116,14 @@ void YAMLLexer::setTokenFactory(TokenFactory<T1> *factory) {
  */
 Ref<TokenFactory<CommonToken>> YAMLLexer::getTokenFactory() { return factory; }
 
-// ===================
-// = Private Methods =
-// ===================
+// ===========
+// = Private =
+// ===========
+
+/**
+ * This constant stores the text that indicates a YAML mapping value.
+ */
+string const YAMLLexer::valueSign = ": ";
 
 /**
  * This function creates a new token with the specified parameters.
@@ -136,6 +141,27 @@ unique_ptr<CommonToken> YAMLLexer::commonToken(size_t type, size_t start,
                                                size_t stop) {
   return factory->create(source, type, "", Token::DEFAULT_CHANNEL, start, stop,
                          line, column);
+}
+
+/**
+ * This function checks if the lookahead of the lexer matches the given string.
+ *
+ * @param text This variable stores the text this function compares to the
+ *             input at the current position.
+ *
+ * @retval true If `text` matches the current input
+ *         false Otherwise
+ */
+bool YAMLLexer::lookaheadIs(string const &text) {
+  size_t position = 1;
+
+  for (size_t const &character : text) {
+    if (input->LA(position) == Token::EOF || input->LA(position) != character) {
+      return false;
+    }
+    position++;
+  }
+  return true;
 }
 
 /**
@@ -168,7 +194,7 @@ void YAMLLexer::fetchTokens() {
   if (input->LA(1) == Token::EOF) {
     scanEnd();
     return;
-  } else if (input->LA(1) == ':' && input->LA(2) == ' ') {
+  } else if (lookaheadIs(valueSign)) {
     scanValue();
   }
 
@@ -270,8 +296,7 @@ void YAMLLexer::scanPlainScalar() {
   string const stop = " \n";
 
   while (stop.find(input->LA(1)) == string::npos &&
-         input->LA(1) != Token::EOF &&
-         !(input->LA(1) == ':' && input->LA(2) == ' ')) {
+         input->LA(1) != Token::EOF && !lookaheadIs(valueSign)) {
     forward();
   }
   tokens.push_back(commonToken(PLAIN_SCALAR, start, input->index() - 1));

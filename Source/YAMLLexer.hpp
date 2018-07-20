@@ -44,6 +44,11 @@ using spdlog::logger;
 // -- Class --------------------------------------------------------------------
 
 class YAMLLexer : public TokenSource {
+  /**
+   * This constant stores the text that indicates a YAML mapping value.
+   */
+  static string const valueSign;
+
   /** This variable stores the input that this lexer scans. */
   CharStream *input;
 
@@ -95,6 +100,18 @@ class YAMLLexer : public TokenSource {
    * This variable stores the logger used by the lexer to print debug messages.
    */
   shared_ptr<spdlog::logger> console;
+
+  /**
+   * This function checks if the lookahead of the lexer matches the given
+   * string.
+   *
+   * @param text This variable stores the text this function compares to the
+   *             input at the current position.
+   *
+   * @retval true If `text` matches the current input
+   *         false Otherwise
+   */
+  bool lookaheadIs(string const &text);
 
   /**
    * This function creates a new token with the specified parameters.
