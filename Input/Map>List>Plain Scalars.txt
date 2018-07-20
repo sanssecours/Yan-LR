@@ -1,0 +1,5 @@
+user/primes:
+user/primes/#0: two
+user/primes/#1: three
+user/primes/#2: five
+user/primes/#3: seven
