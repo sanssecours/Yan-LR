@@ -27,6 +27,20 @@ using spdlog::set_pattern;
 using spdlog::stderr_logger_mt;
 using spdlog::level::trace;
 
+// -- Namespace ----------------------------------------------------------------
+
+namespace {
+/**
+ * This constant stores the text that indicates a YAML list element.
+ */
+string const elementSign = "- ";
+
+/**
+ * This constant stores the text that indicates a YAML mapping value.
+ */
+string const valueSign = ": ";
+} // namespace
+
 // -- Class --------------------------------------------------------------------
 
 /**
@@ -119,16 +133,6 @@ Ref<TokenFactory<CommonToken>> YAMLLexer::getTokenFactory() { return factory; }
 // ===========
 // = Private =
 // ===========
-
-/**
- * This constant stores the text that indicates a YAML list element.
- */
-string const YAMLLexer::elementSign = "- ";
-
-/**
- * This constant stores the text that indicates a YAML mapping value.
- */
-string const YAMLLexer::valueSign = ": ";
 
 /**
  * This function checks if the lookahead of the lexer matches the given string.

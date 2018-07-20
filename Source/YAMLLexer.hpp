@@ -44,16 +44,6 @@ using spdlog::logger;
 // -- Class --------------------------------------------------------------------
 
 class YAMLLexer : public TokenSource {
-  /**
-   * This constant stores the text that indicates a YAML list element.
-   */
-  static string const elementSign;
-
-  /**
-   * This constant stores the text that indicates a YAML mapping value.
-   */
-  static string const valueSign;
-
   /** This variable stores the input that this lexer scans. */
   CharStream *input;
 
