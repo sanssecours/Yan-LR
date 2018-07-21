@@ -295,8 +295,8 @@ void YAMLLexer::addSimpleKeycCandidate() {
 void YAMLLexer::addBlockEnd(long long const lineIndex) {
   while (lineIndex < indents.top()) {
     LOG("Add block end");
-    tokens.push_back(
-        commonToken(BLOCK_END, indents.top(), lineIndex, "BLOCK END"));
+    size_t index = input->index();
+    tokens.push_back(commonToken(BLOCK_END, index, index, "BLOCK END"));
     indents.pop();
   }
 }
