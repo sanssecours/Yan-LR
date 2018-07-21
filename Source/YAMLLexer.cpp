@@ -17,7 +17,6 @@
 
 #include "YAMLLexer.hpp"
 
-using std::endl;
 using std::make_pair;
 
 using antlr4::ParseCancellationException;
@@ -26,15 +25,6 @@ using spdlog::set_level;
 using spdlog::set_pattern;
 using spdlog::stderr_logger_mt;
 using spdlog::level::trace;
-
-// -- Namespace ----------------------------------------------------------------
-
-namespace {
-/**
- * This constant stores the text that indicates a YAML list element.
- */
-string const elementSign = "- ";
-} // namespace
 
 // -- Class --------------------------------------------------------------------
 
