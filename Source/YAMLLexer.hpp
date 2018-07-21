@@ -199,6 +199,12 @@ class YAMLLexer : public TokenSource {
   void scanPlainScalar();
 
   /**
+   * @brief This method scans a double quoted scalar and adds it to the token
+   *        queue.
+   */
+  void scanDoubleQuotedScalar();
+
+  /**
    * @brief This method scans a mapping value token and adds it to the token
    *        queue.
    */
@@ -229,6 +235,8 @@ public:
   static const size_t ELEMENT = 8;
   /** This token type indicates the start of a sequence. */
   static const size_t SEQUENCE_START = 9;
+  /** This token type specifies that the token stores a double quoted scalar. */
+  static const size_t DOUBLE_QUOTED_SCALAR = 10;
 
   /**
    * @brief This constructor creates a new YAML lexer for the given input.

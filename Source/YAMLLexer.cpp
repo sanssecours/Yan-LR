@@ -202,6 +202,9 @@ void YAMLLexer::fetchTokens() {
   } else if (isElement()) {
     scanElement();
     return;
+  } else if (input->LA(1) == '"') {
+    scanDoubleQuotedScalar();
+    return;
   }
 
   scanPlainScalar();
@@ -307,6 +310,22 @@ void YAMLLexer::scanEnd() {
       commonToken(STREAM_END, input->index(), input->index(), "END"));
   tokens.push_back(
       commonToken(Token::EOF, input->index(), input->index(), "EOF"));
+}
+
+/**
+ * @brief This method scans a double quoted scalar and adds it to the token
+ *        queue.
+ */
+void YAMLLexer::scanDoubleQuotedScalar() {
+  LOG("Scan double quoted scalar");
+  size_t start = input->index();
+  forward(); // Include initial double quote
+  while (input->LA(1) != '"') {
+    forward();
+  }
+  forward(); // Include closing double quote
+  tokens.push_back(
+      commonToken(DOUBLE_QUOTED_SCALAR, start, input->index() - 1));
 }
 
 /**
