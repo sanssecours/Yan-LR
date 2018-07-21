@@ -210,6 +210,12 @@ class YAMLLexer : public TokenSource {
   void scanPlainScalar();
 
   /**
+   * @brief This method scans part of plain scalar that does not consist of
+   *        space characters.
+   */
+  void scanPlainNonSpace();
+
+  /**
    * @brief This method scans a double quoted scalar and adds it to the token
    *        queue.
    */

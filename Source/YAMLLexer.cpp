@@ -347,13 +347,24 @@ void YAMLLexer::scanPlainScalar() {
   // A plain scalar can start a simple key
   addSimpleKeycCandidate();
 
+  scanPlainNonSpace();
+
+  tokens.push_back(commonToken(PLAIN_SCALAR, start, input->index() - 1));
+}
+
+/**
+ * @brief This method scans part of plain scalar that does not consist of space
+ *        characters.
+ */
+void YAMLLexer::scanPlainNonSpace() {
   string const stop = " \n";
 
-  while (stop.find(input->LA(1)) == string::npos &&
-         input->LA(1) != Token::EOF && !isValue()) {
-    forward();
+  size_t length = 0;
+  while (stop.find(input->LA(length)) == string::npos &&
+         input->LA(length) != Token::EOF && !isValue(length)) {
+    length++;
   }
-  tokens.push_back(commonToken(PLAIN_SCALAR, start, input->index() - 1));
+  forward(length - 1);
 }
 
 /**
