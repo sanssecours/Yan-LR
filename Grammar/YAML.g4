@@ -8,7 +8,9 @@ yaml : STREAM_START child? STREAM_END EOF ;
 child : value | map | sequence ;
 
 value : scalar ;
-scalar : PLAIN_SCALAR ;
+scalar : PLAIN_SCALAR
+       | DOUBLE_QUOTED_SCALAR
+       ;
 
 map : MAPPING_START pairs BLOCK_END ;
 pairs : pair+ ;
