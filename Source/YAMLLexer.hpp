@@ -158,12 +158,16 @@ class YAMLLexer : public TokenSource {
   void scanToNextToken();
 
   /**
-   * @brief This method checks if the current input starts a key value token.
+   * @brief This method checks if the input at the specified offset starts a key
+   *        value token.
+   *
+   * @param offset This parameter specifies an offset to the current position,
+   *               where this function will look for a key value token.
    *
    * @retval true If the input matches a key value token
    *         false Otherwise
    */
-  bool isValue();
+  bool isValue(size_t const offset = 1);
 
   /**
    * @brief This method checks if the current input starts a list element.

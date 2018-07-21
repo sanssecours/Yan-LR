@@ -245,13 +245,18 @@ void YAMLLexer::scanToNextToken() {
 }
 
 /**
- * @brief This method checks if the current input starts a key value token.
+ * @brief This method checks if the input at the specified offset starts a key
+ *        value token.
+ *
+ * @param offset This parameter specifies an offset to the current position,
+ *               where this function will look for a key value token.
  *
  * @retval true If the input matches a key value token
  *         false Otherwise
  */
-bool YAMLLexer::isValue() {
-  return (input->LA(1) == ':') && (input->LA(2) == '\n' || input->LA(2) == ' ');
+bool YAMLLexer::isValue(size_t const offset) {
+  return (input->LA(offset) == ':') &&
+         (input->LA(offset + 1) == '\n' || input->LA(offset + 1) == ' ');
 }
 
 /**
