@@ -387,7 +387,7 @@ void YAMLLexer::scanValue() {
 void YAMLLexer::scanElement() {
   LOG("Scan element");
   if (addIndentation(column)) {
-    tokens.push_front(
+    tokens.push_back(
         commonToken(SEQUENCE_START, input->index(), column, "SEQUENCE START"));
   }
   tokens.push_back(commonToken(ELEMENT, input->index(), input->index() + 1));
