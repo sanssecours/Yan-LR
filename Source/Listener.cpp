@@ -4,6 +4,8 @@
 
 // -- Functions ----------------------------------------------------------------
 
+namespace {
+
 /**
  * @brief This function converts a given number to an array base name.
  *
@@ -20,6 +22,8 @@ string indexToArrayBaseName(uintmax_t const index) {
 
   return "#" + string(digits - 1, '_') + to_string(index);
 }
+
+} // namespace
 
 // -- Class --------------------------------------------------------------------
 
