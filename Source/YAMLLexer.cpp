@@ -292,7 +292,7 @@ void YAMLLexer::addSimpleKeycCandidate() {
  *                  of spaces) for which this method should add block end
  *                  tokens.
  */
-void YAMLLexer::addBlockEnd(long long lineIndex) {
+void YAMLLexer::addBlockEnd(long long const lineIndex) {
   while (lineIndex < indents.top()) {
     LOG("Add block end");
     tokens.push_back(

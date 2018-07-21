@@ -187,7 +187,7 @@ class YAMLLexer : public TokenSource {
    *                  of spaces) for which this method should add block end
    *                  tokens.
    */
-  void addBlockEnd(long long lineIndex);
+  void addBlockEnd(long long const lineIndex);
 
   /**
    * @brief This method adds the token for the start of the YAML stream to
