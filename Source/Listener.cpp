@@ -81,7 +81,7 @@ void KeyListener::enterPair(PairContext *context) {
   // Entering a mapping such as `part: …` means that we need to add `part` to
   // the key name
   CppKey child{parents.top().getName(), KEY_END};
-  child.addBaseName(context->key()->getText());
+  child.addBaseName(scalarToText(context->key()->getText()));
   parents.push(child);
 }
 
