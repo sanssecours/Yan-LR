@@ -174,6 +174,12 @@ class YAMLLexer : public TokenSource {
   bool isElement();
 
   /**
+   * @brief This method saves a token for a simple key candidate located at the
+   *        current input position.
+   */
+  void addSimpleKeycCandidate();
+
+  /**
    * @brief This method adds block closing tokens to the token queue, if the
    *        indentation decreased.
    *

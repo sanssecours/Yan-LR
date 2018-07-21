@@ -275,6 +275,16 @@ bool YAMLLexer::isElement() {
 }
 
 /**
+ * @brief This method saves a token for a simple key candidate located at the
+ *        current input position.
+ */
+void YAMLLexer::addSimpleKeycCandidate() {
+  size_t position = tokens.size() + tokensEmitted;
+  size_t index = input->index();
+  simpleKey = make_pair(commonToken(KEY, index, index, "KEY"), position);
+}
+
+/**
  * @brief This method adds block closing tokens to the token queue, if the
  *        indentation decreased.
  *
@@ -335,8 +345,7 @@ void YAMLLexer::scanPlainScalar() {
   LOG("Scan plain scalar");
   size_t start = input->index();
   // A plain scalar can start a simple key
-  size_t position = tokens.size() + tokensEmitted;
-  simpleKey = make_pair(commonToken(KEY, start, start, "KEY"), position);
+  addSimpleKeycCandidate();
 
   string const stop = " \n";
 
