@@ -329,6 +329,10 @@ void YAMLLexer::scanEnd() {
 void YAMLLexer::scanDoubleQuotedScalar() {
   LOG("Scan double quoted scalar");
   size_t start = input->index();
+
+  // A double quoted scalar can start a simple key
+  addSimpleKeycCandidate();
+
   forward(); // Include initial double quote
   while (input->LA(1) != '"') {
     forward();
