@@ -23,6 +23,24 @@ string indexToArrayBaseName(uintmax_t const index) {
   return "#" + string(digits - 1, '_') + to_string(index);
 }
 
+/**
+ * @brief This function converts a YAML scalar to a string.
+ *
+ * @param text This string contains a YAML scalar (including quote
+ *             characters).
+ *
+ * @return A string without leading and trailing quote characters
+ */
+string scalarToText(string const &text) {
+  if (text.length() == 0) {
+    return text;
+  }
+  if (*(text.begin()) == '"') {
+    return text.substr(1, text.length() - 2);
+  }
+  return text;
+}
+
 } // namespace
 
 // -- Class --------------------------------------------------------------------
@@ -50,7 +68,7 @@ CppKeySet KeyListener::keySet() { return keys; }
  */
 void KeyListener::exitValue(ValueContext *context) {
   CppKey key = parents.top();
-  key.setString(context->getText());
+  key.setString(scalarToText(context->getText()));
   keys.append(key);
 }
 
