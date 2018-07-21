@@ -46,10 +46,6 @@ foreach (file ${GENERATED_SOURCE_FILES_NAMES} "")
   set_source_files_properties (${filepath} PROPERTIES GENERATED TRUE)
   list (APPEND GENERATED_SOURCE_FILES ${filepath})
 endforeach (file ${GENERATED_SOURCE_FILES_NAMES})
-set_source_files_properties (${GRAMMAR_NAME}Lexer.hpp
-                             PROPERTIES
-                             COMPILE_OPTIONS
-                             "-Wno-unused-parameter")
 
 set (SOURCE_FILES
      "${GENERATED_SOURCE_FILES}"
