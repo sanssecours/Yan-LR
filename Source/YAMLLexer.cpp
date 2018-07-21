@@ -110,12 +110,12 @@ std::string YAMLLexer::getSourceName() { return input->getSourceName(); }
 /**
  * @brief This setter changes the token factory of the lexer.
  *
- * @param factory This parameter specifies the factory that the scanner
- *                should use to create tokens.
+ * @param tokenFactory This parameter specifies the factory that the scanner
+ *                     should use to create tokens.
  */
 template <typename T1>
-void YAMLLexer::setTokenFactory(TokenFactory<T1> *factory) {
-  this->factory = factory;
+void YAMLLexer::setTokenFactory(TokenFactory<T1> *tokenFactory) {
+  factory = tokenFactory;
 }
 
 /**
@@ -170,16 +170,16 @@ unique_ptr<CommonToken> YAMLLexer::commonToken(size_t type, size_t start,
  * @brief This function adds an indentation value if the given value is smaller
  *        than the current indentation.
  *
- * @param column This parameter specifies the indentation value that this
- *               function compares to the current indentation.
+ * @param lineIndex This parameter specifies the indentation value that this
+ *                  function compares to the current indentation.
  *
  * @retval true If the function added an indentation value
  *         false Otherwise
  */
-bool YAMLLexer::addIndentation(size_t const column) {
-  if (static_cast<long long>(column) > indents.top()) {
-    LOGF("Add indentation {}", this->column);
-    indents.push(column);
+bool YAMLLexer::addIndentation(size_t const lineIndex) {
+  if (static_cast<long long>(lineIndex) > indents.top()) {
+    LOGF("Add indentation {}", column);
+    indents.push(lineIndex);
     return true;
   }
   return false;
@@ -288,14 +288,15 @@ void YAMLLexer::addSimpleKeycCandidate() {
  * @brief This method adds block closing tokens to the token queue, if the
  *        indentation decreased.
  *
- * @param column This parameter specifies the column (indentation in number
- *               of spaces) for which this method should add block end tokens.
+ * @param lineIndex This parameter specifies the column (indentation in number
+ *                  of spaces) for which this method should add block end
+ *                  tokens.
  */
-void YAMLLexer::addBlockEnd(long long column) {
-  while (column < indents.top()) {
+void YAMLLexer::addBlockEnd(long long lineIndex) {
+  while (lineIndex < indents.top()) {
     LOG("Add block end");
     tokens.push_back(
-        commonToken(BLOCK_END, indents.top(), column, "BLOCK END"));
+        commonToken(BLOCK_END, indents.top(), lineIndex, "BLOCK END"));
     indents.pop();
   }
 }

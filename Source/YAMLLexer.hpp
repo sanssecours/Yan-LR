@@ -130,8 +130,8 @@ class YAMLLexer : public TokenSource {
    * @brief This function adds an indentation value if the given value is
    * smaller than the current indentation.
    *
-   * @param column This parameter specifies the indentation value that this
-   *               function compares to the current indentation.
+   * @param lineIndex This parameter specifies the indentation value that this
+   *                  function compares to the current indentation.
    *
    * @retval true If the function added an indentation value
    *         false Otherwise
@@ -183,10 +183,11 @@ class YAMLLexer : public TokenSource {
    * @brief This method adds block closing tokens to the token queue, if the
    *        indentation decreased.
    *
-   * @param column This parameter specifies the column (indentation in number
-   *               of spaces) for which this method should add block end tokens.
+   * @param lineIndex This parameter specifies the column (indentation in number
+   *                  of spaces) for which this method should add block end
+   *                  tokens.
    */
-  void addBlockEnd(long long column);
+  void addBlockEnd(long long lineIndex);
 
   /**
    * @brief This method adds the token for the start of the YAML stream to
@@ -291,10 +292,10 @@ public:
   /**
    * @brief This setter changes the token factory of the lexer.
    *
-   * @param factory This parameter specifies the factory that the scanner
-   *                should use to create tokens.
+   * @param tokenFactory This parameter specifies the factory that the scanner
+   *                     should use to create tokens.
    */
-  template <typename T1> void setTokenFactory(TokenFactory<T1> *factory);
+  template <typename T1> void setTokenFactory(TokenFactory<T1> *tokenFactory);
 
   /**
    * @brief Retrieve the current token factory.
