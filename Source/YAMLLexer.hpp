@@ -167,7 +167,7 @@ class YAMLLexer : public TokenSource {
    * @retval true If the input matches a key value token
    *         false Otherwise
    */
-  bool isValue(size_t const offset = 1);
+  bool isValue(size_t const offset = 1) const;
 
   /**
    * @brief This method checks if the current input starts a list element.
@@ -175,7 +175,7 @@ class YAMLLexer : public TokenSource {
    * @retval true If the input matches a list element token
    *         false Otherwise
    */
-  bool isElement();
+  bool isElement() const;
 
   /**
    * @brief This method saves a token for a simple key candidate located at the

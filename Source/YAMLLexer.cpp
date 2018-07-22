@@ -254,7 +254,7 @@ void YAMLLexer::scanToNextToken() {
  * @retval true If the input matches a key value token
  *         false Otherwise
  */
-bool YAMLLexer::isValue(size_t const offset) {
+bool YAMLLexer::isValue(size_t const offset) const {
   return (input->LA(offset) == ':') &&
          (input->LA(offset + 1) == '\n' || input->LA(offset + 1) == ' ');
 }
@@ -265,7 +265,7 @@ bool YAMLLexer::isValue(size_t const offset) {
  * @retval true If the input matches a list element token
  *         false Otherwise
  */
-bool YAMLLexer::isElement() {
+bool YAMLLexer::isElement() const {
   return (input->LA(1) == '-') && (input->LA(2) == '\n' || input->LA(2) == ' ');
 }
 
