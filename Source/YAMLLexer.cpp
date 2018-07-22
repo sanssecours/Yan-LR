@@ -349,24 +349,58 @@ void YAMLLexer::scanPlainScalar() {
   // A plain scalar can start a simple key
   addSimpleKeycCandidate();
 
-  scanPlainNonSpace();
+  size_t lengthSpace = 0;
+  size_t lengthNonSpace = 0;
+  while (true) {
+    lengthNonSpace = countPlainNonSpace(lengthSpace);
+    if (lengthNonSpace == 0) {
+      break;
+    }
+    forward(lengthSpace + lengthNonSpace);
+    lengthSpace = countPlainSpace();
+  }
 
   tokens.push_back(commonToken(PLAIN_SCALAR, start, input->index() - 1));
 }
 
 /**
- * @brief This method scans part of plain scalar that does not consist of space
- *        characters.
+ * @brief This method counts the number of non space characters that can be part
+ *        of a plain scalar at position `offset`.
+ *
+ * @param offset This parameter specifies an offset to the current input
+ *               position, where this function searches for non space
+ *               characters.
+ *
+ * @return The number of non-space characters at the input position `offset`
  */
-void YAMLLexer::scanPlainNonSpace() {
+size_t YAMLLexer::countPlainNonSpace(size_t const offset) const {
+  LOG("Scan non space characters");
   string const stop = " \n";
 
-  size_t length = 0;
-  while (stop.find(input->LA(length)) == string::npos &&
-         input->LA(length) != Token::EOF && !isValue(length)) {
-    length++;
+  size_t lookahead = offset + 1;
+  while (stop.find(input->LA(lookahead)) == string::npos &&
+         input->LA(lookahead) != Token::EOF && !isValue(lookahead)) {
+    lookahead++;
   }
-  forward(length - 1);
+
+  LOGF("Found {} non-space characters", lookahead - offset - 1);
+  return lookahead - offset - 1;
+}
+
+/**
+ * @brief This method counts the number of space characters that can be part
+ *        of a plain scalar at the current input position.
+ *
+ * @return The number of space characters at the current input position
+ */
+size_t YAMLLexer::countPlainSpace() const {
+  LOG("Scan spaces");
+  size_t lookahead = 1;
+  while (input->LA(lookahead) == ' ') {
+    lookahead++;
+  }
+  LOGF("Found {} space characters", lookahead - 1);
+  return lookahead - 1;
 }
 
 /**
