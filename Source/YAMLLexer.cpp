@@ -61,6 +61,12 @@ unique_ptr<Token> YAMLLexer::nextToken() {
     }
   }
 
+  // If `fetchTokens` was unable to retrieve a token (error condition), we emit
+  // `EOF`.
+  if (tokens.size() <= 0) {
+    tokens.push_back(
+        commonToken(Token::EOF, input->index(), input->index(), "EOF"));
+  }
   unique_ptr<CommonToken> token = move(tokens.front());
   tokens.pop_front();
   tokensEmitted++;
