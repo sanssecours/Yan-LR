@@ -208,6 +208,8 @@ void YAMLLexer::fetchTokens() {
  *                   the function should consume.
  */
 void YAMLLexer::forward(size_t const characters = 1) {
+  LOGF("Forward {} characters", characters);
+
   for (size_t charsLeft = characters; charsLeft > 0; charsLeft--) {
     if (input->LA(1) == Token::EOF) {
       LOG("Hit EOF!");
