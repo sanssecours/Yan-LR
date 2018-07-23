@@ -82,6 +82,12 @@ class YAMLLexer : public TokenSource {
   stack<long long> indents{deque<long long>{-1}};
 
   /**
+   * This boolean specifies if the lexer has already scanned the whole input or
+   * not.
+   */
+  bool done = false;
+
+  /**
    * This pair stores a simple key candidate token (first part) and its
    * position in the token queue (second part).
    *
@@ -137,6 +143,14 @@ class YAMLLexer : public TokenSource {
    *         false Otherwise
    */
   bool addIndentation(size_t const column);
+
+  /**
+   * @brief This function checks if the lexer needs to scan additional tokens.
+   *
+   * @retval true If the lexer should fetch additional tokens
+   *         false Otherwise
+   */
+  bool needMoreTokens() const;
 
   /**
    * @brief This method adds new tokens to the token stream.
