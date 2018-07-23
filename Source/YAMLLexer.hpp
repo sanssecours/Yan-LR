@@ -244,6 +244,11 @@ class YAMLLexer : public TokenSource {
   size_t countPlainSpace() const;
 
   /**
+   * @brief This method scans a comment and adds it to the token queue.
+   */
+  void scanComment();
+
+  /**
    * @brief This method scans a double quoted scalar and adds it to the token
    *        queue.
    */
@@ -282,6 +287,8 @@ public:
   static const size_t SEQUENCE_START = 9;
   /** This token type specifies that the token stores a double quoted scalar. */
   static const size_t DOUBLE_QUOTED_SCALAR = 10;
+  /** This token type specifies that the token stores a (line) comment. */
+  static const size_t COMMENT = 11;
 
   /**
    * @brief This constructor creates a new YAML lexer for the given input.
