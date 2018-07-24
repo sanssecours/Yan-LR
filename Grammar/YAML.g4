@@ -5,7 +5,7 @@ options {
 }
 
 yaml : STREAM_START child? STREAM_END EOF ;
-child : value | map | sequence ;
+child : value | map | sequence | comment ;
 
 value : scalar ;
 scalar : PLAIN_SCALAR
@@ -21,3 +21,4 @@ sequence : SEQUENCE_START elements BLOCK_END ;
 elements : element+ ;
 element : ELEMENT child ;
 
+comment : COMMENT ;
