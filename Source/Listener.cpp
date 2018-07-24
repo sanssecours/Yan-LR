@@ -35,7 +35,7 @@ string scalarToText(string const &text) {
   if (text.length() == 0) {
     return text;
   }
-  if (*(text.begin()) == '"') {
+  if (*(text.begin()) == '"' || *(text.begin()) == '\'') {
     return text.substr(1, text.length() - 2);
   }
   return text;
