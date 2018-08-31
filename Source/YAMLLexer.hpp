@@ -23,6 +23,7 @@
 // -- Imports ------------------------------------------------------------------
 
 #include <antlr4-runtime.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
 using std::deque;
@@ -100,7 +101,7 @@ class YAMLLexer : public TokenSource {
   /**
    * This variable stores the logger used by the lexer to print debug messages.
    */
-  shared_ptr<spdlog::logger> console;
+  shared_ptr<logger> console;
 
   /**
    * @brief This function creates a new token with the specified parameters.

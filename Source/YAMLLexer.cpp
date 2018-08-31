@@ -23,7 +23,7 @@ using antlr4::ParseCancellationException;
 
 using spdlog::set_level;
 using spdlog::set_pattern;
-using spdlog::stderr_logger_mt;
+using spdlog::stderr_color_mt;
 using spdlog::level::trace;
 
 // -- Class --------------------------------------------------------------------
@@ -36,7 +36,7 @@ using spdlog::level::trace;
 YAMLLexer::YAMLLexer(CharStream *input) {
   set_pattern("[%H:%M:%S:%e] %v ");
   set_level(trace);
-  console = stderr_logger_mt("console");
+  console = stderr_color_mt("console");
   LOG("Init lexer");
 
   this->input = input;
