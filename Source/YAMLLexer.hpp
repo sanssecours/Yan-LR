@@ -135,7 +135,7 @@ class YAMLLexer : public TokenSource {
 
   /**
    * @brief This function adds an indentation value if the given value is
-   * smaller than the current indentation.
+   *        smaller than the current indentation.
    *
    * @param lineIndex This parameter specifies the indentation value that this
    *                  function compares to the current indentation.
