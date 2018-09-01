@@ -188,7 +188,7 @@ unique_ptr<CommonToken> YAMLLexer::commonToken(size_t type, size_t start,
  */
 bool YAMLLexer::addIndentation(size_t const lineIndex) {
   if (static_cast<long long>(lineIndex) > indents.top()) {
-    LOGF("Add indentation {}", column);
+    LOGF("Add indentation {}", lineIndex);
     indents.push(lineIndex);
     return true;
   }
