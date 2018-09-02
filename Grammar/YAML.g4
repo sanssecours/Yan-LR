@@ -19,7 +19,7 @@ pair : KEY key
        VALUE
        comment* // Match possible comment, even if there is no value (child)
        child?
-      ;
+     ;
 key : scalar ;
 
 sequence : SEQUENCE_START elements BLOCK_END ;
