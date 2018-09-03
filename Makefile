@@ -26,7 +26,7 @@ test: compile
 
 compile:
 	@printf '👷🏽‍♀️ Build\n\n'
-	@ninja -C Build
+	@ninja -C Build | sed -e 's~\.\./~~'
 
 configure:
 	@mkdir -p Build
