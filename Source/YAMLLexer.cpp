@@ -187,7 +187,7 @@ unique_ptr<CommonToken> YAMLLexer::commonToken(size_t type, size_t start,
  *         false Otherwise
  */
 bool YAMLLexer::addIndentation(size_t const lineIndex) {
-  if (static_cast<long long>(lineIndex) > indents.top()) {
+  if (lineIndex > indents.top()) {
     LOGF("Add indentation {}", lineIndex);
     indents.push(lineIndex);
     return true;
@@ -244,7 +244,7 @@ void YAMLLexer::forward(size_t const characters = 1) {
 
     column++;
     if (input->LA(1) == '\n') {
-      column = 0;
+      column = 1;
       line++;
     }
     input->consume();
@@ -330,7 +330,7 @@ void YAMLLexer::addSimpleKeyCandidate() {
  *                  of spaces) for which this method should add block end
  *                  tokens.
  */
-void YAMLLexer::addBlockEnd(long long const lineIndex) {
+void YAMLLexer::addBlockEnd(size_t const lineIndex) {
   while (lineIndex < indents.top()) {
     LOG("Add block end");
     size_t index = input->index();
@@ -354,7 +354,7 @@ void YAMLLexer::scanStart() {
  * @brief This method adds the end markers to the token queue.
  */
 void YAMLLexer::scanEnd() {
-  addBlockEnd(-1);
+  addBlockEnd(0);
   tokens.push_back(
       commonToken(STREAM_END, input->index(), input->index(), "END"));
   tokens.push_back(
