@@ -12,11 +12,9 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=integer")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-execute_process (COMMAND antlr4
-                 RESULT_VARIABLE ANTLR_NOT_AVAILABLE
-                 OUTPUT_QUIET)
+execute_process (COMMAND antlr RESULT_VARIABLE ANTLR_NOT_AVAILABLE OUTPUT_QUIET)
 if (ANTLR_NOT_AVAILABLE)
-  message (FATAL_ERROR "ANTLR 4 executable (antlr4) not found")
+  message (FATAL_ERROR "ANTLR 4 executable (antlr) not found")
 endif (ANTLR_NOT_AVAILABLE)
 
 find_package (ANTLR4CPP QUIET)
@@ -59,7 +57,7 @@ set (SOURCE_FILES
      Source/YAMLLexer.cpp)
 
 add_custom_command (OUTPUT ${GENERATED_SOURCE_FILES}
-                    COMMAND antlr4 -Werror -Dlanguage=Cpp -o
+                    COMMAND antlr -Werror -Dlanguage=Cpp -o
                             ${CMAKE_CURRENT_BINARY_DIR} -package antlr
                             ${GRAMMAR_FILE}
                     DEPENDS ${GRAMMAR_FILE}
